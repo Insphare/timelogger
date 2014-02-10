@@ -56,11 +56,11 @@ class Calculate {
 	}
 
 	/**
-	 * @param Work_Container $workContainer
+	 * @param $time
 	 * @return string
 	 */
-	public function getHumanAbleList(Work_Container $workContainer) {
-		$diffSeconds = $workContainer->getDuration();
+	public function getHumanAbleList($time) {
+		$diffSeconds = $time;
 		$years = floor($diffSeconds / 31556926);
 
 		$month = floor($diffSeconds / 262974383);

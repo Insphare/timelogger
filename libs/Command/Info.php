@@ -16,9 +16,11 @@ class Command_Info extends Command_Stop {
 		$taskLabel = $workObject->getLabel();
 		$workObject->setStopped(time());
 
-		$string = 'You are working on \'' . $taskLabel . '\'. ';
-		$string .= '(Duration: ' . trim($this->getCalculator()->getHumanAbleList($workObject)) . ')';
+		if (true === $workObject->hasBreakTime()) {
+			$workObject->stopBreakTime();
+		}
 
+		$string = 'You are working on \'' . $taskLabel . '\'. ' . $this->getDurationLine($workObject);
 		return $string;
 	}
 }

@@ -20,6 +20,18 @@ abstract class Command_Abstract {
 	 */
 	protected $calculator;
 
+	protected $lockStart = array(
+		'stop',
+		'change',
+		'info',
+		'break',
+	);
+
+	protected $lockBreak = array(
+		'resume',
+		'info',
+	);
+
 	/**
 	 * @param array $arguments
 	 */

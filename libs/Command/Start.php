@@ -23,11 +23,7 @@ class Command_Start extends Command_Abstract {
 		$workObject->setLabel($taskLabel);
 		$this->saveCacheData($workObject);
 
-		$this->getFileManager()->lockActionsForCommands(array(
-			'stop',
-			'change',
-			'info'
-		));
+		$this->getFileManager()->lockActionsForCommands($this->lockStart);
 
 		return 'Work on \'' . $taskLabel . '\' started';
 	}

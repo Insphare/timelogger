@@ -23,7 +23,7 @@ class Command_Show extends Command_Abstract {
 			return 'There are no logs, yet.';
 		}
 
-		$separator1 = str_pad('', 101, '-');
+		$separator1 = str_pad('', 125, '-');
 		$separator2 = str_pad('', 33, '-');
 
 		$data = array();
@@ -31,7 +31,7 @@ class Command_Show extends Command_Abstract {
 		$data[] = $separator1;
 		$data[] = 'Details';
 		$data[] = $separator1;
-		$data[] = ('Task		Start			Stop			'.str_pad('Duration', 13, ' ', STR_PAD_LEFT).'		Rounded hours');
+		$data[] = 'Task		Start			Stop			'.str_pad('Duration', 13, ' ', STR_PAD_LEFT).'		'.str_pad('Break', 13, ' ', STR_PAD_LEFT).'		Rounded hours';
 		$data[] = $separator1;
 
 		$today = 0;
@@ -45,7 +45,15 @@ class Command_Show extends Command_Abstract {
 			}
 			$group[$workObject->getLabel()] += ($workObject->getDuration());
 
-			$data[] = $this->fixTasksLength($workObject->getLabel()) . "\t" . date('Y-m-d H:i:s', $workObject->getStarted()) . "\t" . date('Y-m-d H:i:s', $workObject->getStopped()) . "\t" . $this->getCalculator()->getHumanAbleList($workObject) . "\t\t" . str_pad($hourUnit, 13, ' ', STR_PAD_LEFT);
+			$line = array();
+			$line[] = $this->fixTasksLength($workObject->getLabel()) . "\t";
+			$line[] = date('Y-m-d H:i:s', $workObject->getStarted()) . "\t";
+			$line[] = date('Y-m-d H:i:s', $workObject->getStopped()) . "\t";
+			$line[] = $this->getCalculator()->getHumanAbleList($workObject->getDuration()) . "\t\t" ;
+			$line[] = str_pad( $this->getCalculator()->getHumanAbleList($workObject->getBreakTime()), 13, ' ', STR_PAD_LEFT);
+			$line[] = str_pad($hourUnit, 13, ' ', STR_PAD_LEFT);
+
+			$data[] = implode('', $line);
 		}
 		$data[] = $separator1;
 
