@@ -3,7 +3,7 @@
 /**
  * Class Command_Break
  */
-class Command_Break extends Command_Stop {
+class Command_Pause extends Command_Stop {
 
 	/**
 	 * @throws Command_Exception

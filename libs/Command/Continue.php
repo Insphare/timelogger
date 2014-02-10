@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Command_Break
+ * Class Command_Continue
  */
-class Command_Resume extends Command_Break {
+class Command_Continue extends Command_Pause {
 
 	/**
 	 * @throws Command_Exception
