@@ -202,7 +202,7 @@ class TimeLogger {
 			$this->printLine('');
 		}
 
-		if (true===$this->preventHelp) {
+		if (true === $this->preventHelp) {
 			$this->preventHelp = false;
 			return;
 		}
@@ -256,10 +256,10 @@ class TimeLogger {
 					$this->boringCounter++;
 				}
 
-				if ($this->boringCounter > 0 && !($this->boringCounter %3)) {
+				if ($this->boringCounter > 0 && !($this->boringCounter % 3)) {
 					$this->printWtfBoring();
 				}
-				elseif ($this->boringCounter > 0 && !($this->boringCounter %5)) {
+				elseif ($this->boringCounter > 0 && !($this->boringCounter % 5)) {
 					$wtf = array(
 						'lampman.dat',
 						'sleep.dat',
@@ -290,7 +290,7 @@ class TimeLogger {
 
 				$cmd = $this->getFileManager()->getLockActions();
 				foreach ($cmd as $cmdName) {
-					$commandsAllowed[$cmdName] = "'".$cmdName."'";
+					$commandsAllowed[$cmdName] = "'" . $cmdName . "'";
 				}
 
 				$message = 'Next you have to be perform ' . implode(' or ', $commandsAllowed) . '.';

@@ -6,11 +6,11 @@
 class Calculate {
 
 	/**
-	 * @param Work_Container $workContainer
+	 * @param $intSeconds
 	 * @return string
 	 */
-	public function getHourUnit($seconds) {
-		$hourUnit = number_format(round(($seconds / 60) / 60, 3), 2, ',', '.');
+	public function getHourUnit($intSeconds) {
+		$hourUnit = number_format(round(($intSeconds / 60) / 60, 3), 2, ',', '.');
 
 		$check = (int)$hourUnit{2} . (int)$hourUnit{3};
 
@@ -21,19 +21,19 @@ class Calculate {
 		$tolerance = 10;
 
 		switch (true) {
-			case $check <= 25+$tolerance:
+			case $check <= 25 + $tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 25;
 				break;
 
-			case $check <= 50+$tolerance:
+			case $check <= 50 + $tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 50;
 				break;
 
-			case $check <= 75+$tolerance:
+			case $check <= 75 + $tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 75;

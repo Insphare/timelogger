@@ -21,10 +21,14 @@ class Command_Stop extends Command_Abstract {
 		return 'Work on \'' . $taskLabel . '\' stopped. ' . $this->getDurationLine($workObject);
 	}
 
+	/**
+	 * @param Work_Container $workContainer
+	 * @return string
+	 */
 	protected function getDurationLine(Work_Container $workContainer) {
 		$duration = trim($this->getCalculator()->getHumanAbleList($workContainer->getDuration()));
 		$break = trim($this->getCalculator()->getHumanAbleList($workContainer->getBreakTime()));
-		return '(Duration: '.$duration .' excl. break: '.$break.')';
+		return '(Duration: ' . $duration . ' excl. break: ' . $break . ')';
 	}
 
 	/**

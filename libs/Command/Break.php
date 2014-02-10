@@ -6,6 +6,7 @@
 class Command_Break extends Command_Stop {
 
 	/**
+	 * @throws Command_Exception
 	 * @return string
 	 */
 	public function execute() {
@@ -23,6 +24,4 @@ class Command_Break extends Command_Stop {
 		$string = 'Breaking on task \'' . $workObject->getLabel() . '\'';
 		return $string;
 	}
-
-
 }

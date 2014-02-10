@@ -6,13 +6,13 @@
 class Command_Resume extends Command_Break {
 
 	/**
+	 * @throws Command_Exception
 	 * @return string
 	 */
 	public function execute() {
 		$this->assertActiveLocking();
 
 		$workObject = $this->getWorkObject();
-
 
 		if (false === $workObject->hasBreakTime()) {
 			throw new Command_Exception('Currently, you are not in breaking.');
@@ -25,6 +25,4 @@ class Command_Resume extends Command_Break {
 		$string = 'Resuming on task \'' . $workObject->getLabel() . '\'';
 		return $string;
 	}
-
-
 }

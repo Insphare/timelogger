@@ -120,7 +120,7 @@ class Work_Container {
 		foreach ($this->breakTime as $break) {
 			$stop = (int)$break['stop'];
 			$start = (int)$break['start'];
-			$diff = $stop-$start;
+			$diff = $stop - $start;
 			$breakTime += $diff;
 		}
 
@@ -134,10 +134,16 @@ class Work_Container {
 		return null !== $this->lastBreakTimeBegin;
 	}
 
+	/**
+	 *
+	 */
 	public function startBreakTime() {
 		$this->lastBreakTimeBegin = time();
 	}
 
+	/**
+	 *
+	 */
 	public function stopBreakTime() {
 		$this->breakTime[] = array(
 			'start' => $this->lastBreakTimeBegin,
@@ -147,21 +153,17 @@ class Work_Container {
 		$this->lastBreakTimeBegin = null;
 	}
 
-
-
 	/**
 	 * @param array $breakTime
 	 */
-	public function setBreakTime( $breakTime ) {
+	public function setBreakTime($breakTime) {
 		$this->breakTime = $breakTime;
 	}
-
-
 
 	/**
 	 * @param int $lastBreakTimeBegin
 	 */
-	public function setLastBreakTimeBegin( $lastBreakTimeBegin ) {
+	public function setLastBreakTimeBegin($lastBreakTimeBegin) {
 		$this->lastBreakTimeBegin = $lastBreakTimeBegin;
 	}
 
@@ -171,6 +173,4 @@ class Work_Container {
 	protected function getProperties() {
 		return get_object_vars($this);
 	}
-
-
 }
