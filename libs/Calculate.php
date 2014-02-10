@@ -17,20 +17,23 @@ class Calculate {
 		$round = false;
 		$plusH = false;
 		$plusM = 0;
+
+		$tolerance = 10;
+
 		switch (true) {
-			case $check < 24:
+			case $check <= 25+$tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 25;
 				break;
 
-			case $check < 49:
+			case $check <= 50+$tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 50;
 				break;
 
-			case $check < 74:
+			case $check <= 75+$tolerance:
 				$round = true;
 				$plusH = false;
 				$plusM = 75;
