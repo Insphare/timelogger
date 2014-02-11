@@ -24,11 +24,11 @@ abstract class Command_Abstract {
 		'stop',
 		'change',
 		'info',
-		'break',
+		'pause',
 	);
 
 	protected $lockBreak = array(
-		'resume',
+		'continue',
 		'info',
 	);
 
