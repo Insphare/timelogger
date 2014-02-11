@@ -208,12 +208,12 @@ class TimeLogger {
 		}
 
 		$text = array(
-			'start				- Start work',
-			'|->	stop		- Stop current work',
-			'|->	change		- Change current work name',
-			'|->	info		- Information about the current work',
-			'|->	pause		- Pause the current work',
-			'|->	continue	- Continue the work',
+			'start		- Start work',
+			'stop		- Stop current work',
+			'change		- Change current work name',
+			'info		- Information about the current work',
+			'pause		- Pause the current work',
+			'continue	- Continue the work',
 			'show		- Show tasks',
 			'export		- Export all to text files',
 			'help		- Show help.',
