@@ -6,6 +6,14 @@
 class Command_Start extends Command_Abstract {
 
 	/**
+	 * @param array $arguments
+	 */
+	public function __construct(array $arguments) {
+		$this->summaryArgumentsToOne();
+		parent::__construct($arguments);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function execute() {

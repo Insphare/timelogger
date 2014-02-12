@@ -12,6 +12,40 @@ class Command_Show extends Command_Abstract {
 		return $this->getDay(time());
 	}
 
+
+
+	/**
+	 * @param $amount
+	 *
+	 * @return string
+	 */
+	private function tabs($amount) {
+		$str = '';
+		$count = 0;
+
+		while(true) {
+			$count++;
+			$str .= "\t";
+			if ($count === $amount) {
+				break;
+			}
+		}
+
+		return $str;
+	}
+
+
+
+	/**
+	 * @param $string
+	 * @param $amount
+	 *
+	 * @return string
+	 */
+	private function padLeft($string, $amount) {
+		return str_pad($string, $amount, ' ', STR_PAD_LEFT);
+	}
+
 	/**
 	 * @param $timestamp
 	 * @return string
@@ -23,18 +57,29 @@ class Command_Show extends Command_Abstract {
 			return 'There are no logs, yet.';
 		}
 
-		$separator1 = str_pad('', 125, '-');
-		$separator2 = str_pad('', 33, '-');
+		$separator1 = str_pad('', 110, '-');
+		$separator2 = str_pad('', 41, '-');
+		$durationSpace = 13;
 
 		$data = array();
 		$data[] = '';
 		$data[] = $separator1;
-		$data[] = 'Details';
+		$data[] = 'Details (' . date('Y-m-d', $timestamp) . ')';
 		$data[] = $separator1;
-		$data[] = 'Task		Start			Stop			' . str_pad('Duration', 13, ' ', STR_PAD_LEFT) . '		' . str_pad('Break', 13, ' ', STR_PAD_LEFT) . '		Rounded hours';
+
+		$line = array();
+		$line[] = $this->fixTasksLength('Task') . $this->tabs(1) ;
+		$line[] = 'Start' . $this->tabs(2);
+		$line[] = 'Stop' . $this->tabs(2);
+		$line[] = $this->padLeft('Duration', $durationSpace) . $this->tabs(1);
+		$line[] = $this->padLeft('Break', $durationSpace) . $this->tabs(1);
+		$line[] = $this->padLeft('Round (h)', $durationSpace+1);
+
+		$data[] = implode('', $line);
 		$data[] = $separator1;
 
 		$today = 0;
+		$summaryBreak = 0;
 		$group = array();
 
 		foreach ($workObjects as $workObject) {
@@ -46,36 +91,39 @@ class Command_Show extends Command_Abstract {
 			$group[$workObject->getLabel()] += ($workObject->getDuration());
 
 			$line = array();
-			$line[] = $this->fixTasksLength($workObject->getLabel()) . "\t";
-			$line[] = date('Y-m-d H:i:s', $workObject->getStarted()) . "\t";
-			$line[] = date('Y-m-d H:i:s', $workObject->getStopped()) . "\t";
-			$line[] = $this->getCalculator()->getHumanAbleList($workObject->getDuration()) . "\t\t";
-			$line[] = str_pad($this->getCalculator()->getHumanAbleList($workObject->getBreakTime()), 13, ' ', STR_PAD_LEFT);
-			$line[] = str_pad($hourUnit, 13, ' ', STR_PAD_LEFT);
+			$line[] = $this->fixTasksLength($workObject->getLabel()) . $this->tabs(1);
+			$line[] = date('H:i:s', $workObject->getStarted()) . $this->tabs(1);
+			$line[] = date('H:i:s', $workObject->getStopped()) . $this->tabs(1);
+			$line[] = $this->getCalculator()->getHumanAbleList($workObject->getDuration()) . $this->tabs(1);
+			$line[] = $this->padLeft($this->getCalculator()->getHumanAbleList($workObject->getBreakTime()), $durationSpace);
+			$line[] = $this->padLeft($hourUnit, $durationSpace-1);
+
+			$summaryBreak += $workObject->getBreakTime();
 
 			$data[] = implode('', $line);
 		}
 		$data[] = $separator1;
 
 		$data[] = '';
-		$data[] = '';
 
 		// summary
 		$data[] = '';
 		$data[] = $separator2;
-		$data[] = 'Task			Log hours';
+		$data[] = $this->fixTasksLength('Task').$this->tabs(1).'Log hours';
 		$data[] = $separator2;
 		$summaryTime = 0;
 		foreach ($group as $task => $seconds) {
 			$rounded = $this->getCalculator()->getHourUnit($seconds);
 			$summaryTime += $this->fixStringToFloat($rounded);
-			$data[] = $this->fixTasksLength($task) . "\t\t" . str_pad($rounded, 9, ' ', STR_PAD_LEFT);
+			$data[] = $this->fixTasksLength($task) .$this->tabs(1) . $rounded;
 		}
 		$data[] = $separator2;
 		$data[] = '';
 		$data[] = '';
 		$data[] = $separator2;
-		$data[] = $this->fixTasksLength('Summary') . "\t\t" . str_pad($this->fixFloatToString($summaryTime), 9, ' ', STR_PAD_LEFT);
+		$data[] = $this->fixTasksLength('Summary break') . $this->tabs(1) . $this->getCalculator()->getHourUnit($summaryBreak);
+		$data[] = $separator2;
+		$data[] = $this->fixTasksLength('Summary worked') . $this->tabs(1) . $this->fixFloatToString($summaryTime);
 		$data[] = $separator2;
 
 		return implode(PHP_EOL, $data);

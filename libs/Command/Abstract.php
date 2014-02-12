@@ -8,7 +8,7 @@ abstract class Command_Abstract {
 	/**
 	 *
 	 */
-	const TASK_LENGTH = 12;
+	const TASK_LENGTH = 25;
 
 	/**
 	 * @var array
@@ -33,11 +33,29 @@ abstract class Command_Abstract {
 	);
 
 	/**
+	 * @var bool
+	 */
+	private $summaryArgumentsToOne = false;
+
+	/**
 	 * @param array $arguments
 	 */
 	public function __construct(array $arguments) {
+		if (true === $this->summaryArgumentsToOne) {
+			$summary = implode(' ', $arguments);
+			$arguments = array(1=>$summary);
+		}
+
 		$this->arguments = $arguments;
 		$this->calculator = new Calculate();
+	}
+
+
+
+	/**
+	 */
+	protected function summaryArgumentsToOne() {
+		$this->summaryArgumentsToOne = true;
 	}
 
 	/**
