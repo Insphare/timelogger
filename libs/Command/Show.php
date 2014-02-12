@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Show
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Show extends Command_Abstract {
 
@@ -12,8 +15,6 @@ class Command_Show extends Command_Abstract {
 		return $this->getDay(time());
 	}
 
-
-
 	/**
 	 * @param $amount
 	 *
@@ -23,18 +24,16 @@ class Command_Show extends Command_Abstract {
 		$str = '';
 		$count = 0;
 
-		while(true) {
+		while (true) {
 			$count++;
 			$str .= "\t";
-			if ($count === $amount) {
+			if ($count >= $amount) {
 				break;
 			}
 		}
 
 		return $str;
 	}
-
-
 
 	/**
 	 * @param $string
@@ -68,12 +67,12 @@ class Command_Show extends Command_Abstract {
 		$data[] = $separator1;
 
 		$line = array();
-		$line[] = $this->fixTasksLength('Task') . $this->tabs(1) ;
+		$line[] = $this->fixTasksLength('Task') . $this->tabs(1);
 		$line[] = 'Start' . $this->tabs(2);
 		$line[] = 'Stop' . $this->tabs(2);
 		$line[] = $this->padLeft('Duration', $durationSpace) . $this->tabs(1);
 		$line[] = $this->padLeft('Break', $durationSpace) . $this->tabs(1);
-		$line[] = $this->padLeft('Round (h)', $durationSpace+1);
+		$line[] = $this->padLeft('Round (h)', $durationSpace + 1);
 
 		$data[] = implode('', $line);
 		$data[] = $separator1;
@@ -96,7 +95,7 @@ class Command_Show extends Command_Abstract {
 			$line[] = date('H:i:s', $workObject->getStopped()) . $this->tabs(1);
 			$line[] = $this->getCalculator()->getHumanAbleList($workObject->getDuration()) . $this->tabs(1);
 			$line[] = $this->padLeft($this->getCalculator()->getHumanAbleList($workObject->getBreakTime()), $durationSpace);
-			$line[] = $this->padLeft($hourUnit, $durationSpace-1);
+			$line[] = $this->padLeft($hourUnit, $durationSpace - 1);
 
 			$summaryBreak += $workObject->getBreakTime();
 
@@ -109,13 +108,13 @@ class Command_Show extends Command_Abstract {
 		// summary
 		$data[] = '';
 		$data[] = $separator2;
-		$data[] = $this->fixTasksLength('Task').$this->tabs(1).'Log hours';
+		$data[] = $this->fixTasksLength('Task') . $this->tabs(1) . 'Log hours';
 		$data[] = $separator2;
 		$summaryTime = 0;
 		foreach ($group as $task => $seconds) {
 			$rounded = $this->getCalculator()->getHourUnit($seconds);
 			$summaryTime += $this->fixStringToFloat($rounded);
-			$data[] = $this->fixTasksLength($task) .$this->tabs(1) . $rounded;
+			$data[] = $this->fixTasksLength($task) . $this->tabs(1) . $rounded;
 		}
 		$data[] = $separator2;
 		$data[] = '';
@@ -134,7 +133,7 @@ class Command_Show extends Command_Abstract {
 	 * @return string
 	 */
 	protected function fixTasksLength($task) {
-		return str_pad($task, Command_Abstract::TASK_LENGTH, ' ');
+		return str_pad($task, Command_Abstract::TASK_LENGTH_NAME, ' ');
 	}
 
 	/**

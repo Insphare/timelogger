@@ -2,13 +2,16 @@
 
 /**
  * Class Command_Abstract
+ *
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 abstract class Command_Abstract {
 
 	/**
 	 *
 	 */
-	const TASK_LENGTH = 25;
+	const TASK_LENGTH_NAME = 25;
 
 	/**
 	 * @var array
@@ -20,6 +23,9 @@ abstract class Command_Abstract {
 	 */
 	protected $calculator;
 
+	/**
+	 * @var array
+	 */
 	protected $lockStart = array(
 		'stop',
 		'change',
@@ -27,6 +33,9 @@ abstract class Command_Abstract {
 		'pause',
 	);
 
+	/**
+	 * @var array
+	 */
 	protected $lockBreak = array(
 		'continue',
 		'info',
@@ -43,14 +52,12 @@ abstract class Command_Abstract {
 	public function __construct(array $arguments) {
 		if (true === $this->summaryArgumentsToOne) {
 			$summary = implode(' ', $arguments);
-			$arguments = array(1=>$summary);
+			$arguments = array(1 => $summary);
 		}
 
 		$this->arguments = $arguments;
 		$this->calculator = new Calculate();
 	}
-
-
 
 	/**
 	 */
@@ -91,11 +98,21 @@ abstract class Command_Abstract {
 	 * @param null $overwriteClass
 	 */
 	protected function saveCacheData($data, $overwriteClass = null) {
+		$class = $this->getClassName($overwriteClass);
+		$this->getFileManager()->storeCacheData($class, $data);
+	}
+
+	/**
+	 * @param null $overwriteClass
+	 * @return string
+	 */
+	private function getClassName($overwriteClass = null) {
 		$class = get_class($this);
 		if (null !== $overwriteClass) {
 			$class = 'Command_' . $overwriteClass;
 		}
-		$this->getFileManager()->storeCacheData($class, $data);
+
+		return $class;
 	}
 
 	/**
@@ -103,10 +120,7 @@ abstract class Command_Abstract {
 	 * @return null|string
 	 */
 	protected function loadCacheData($overwriteClass = null) {
-		$class = get_class($this);
-		if (null !== $overwriteClass) {
-			$class = 'Command_' . $overwriteClass;
-		}
+		$class = $this->getClassName($overwriteClass);
 		return $this->getFileManager()->loadCacheData($class);
 	}
 

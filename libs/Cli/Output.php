@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Cli_Output
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
+ */
 class Cli_Output {
 
 	const COLOR_BLACK = 'black';
@@ -102,7 +108,10 @@ class Cli_Output {
 	 *
 	 */
 	public function flush() {
-		echo implode('', $this->output);
+		if (!empty($this->output)) {
+			echo implode('', $this->output);
+		}
+
 		$this->output = array();
 	}
 
@@ -137,5 +146,9 @@ class Cli_Output {
 		}
 
 		return $this->backgroundColor{$colorName};
+	}
+
+	public function __destruct() {
+		$this->flush();
 	}
 }

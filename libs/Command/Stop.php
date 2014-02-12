@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Stop
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Stop extends Command_Abstract {
 

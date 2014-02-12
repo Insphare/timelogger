@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Break
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Pause extends Command_Stop {
 
@@ -13,7 +16,7 @@ class Command_Pause extends Command_Stop {
 		$this->assertActiveLocking();
 
 		$workObject = $this->getWorkObject();
-		if (true === $workObject->hasBreakTime()) {
+		if (true === $workObject->hasActiveBreakTime()) {
 			throw new Command_Exception('Currently, this work is breaking.');
 		}
 

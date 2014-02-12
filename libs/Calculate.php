@@ -2,6 +2,9 @@
 
 /**
  * Class Calculate
+ *
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Calculate {
 
@@ -59,30 +62,42 @@ class Calculate {
 	}
 
 	/**
+	 * @param $string
+	 * @param $length
+	 *
+	 * @param string $fillCharacter
+	 * @return string
+	 */
+	private function padString($string, $length, $fillCharacter = ' ') {
+		return str_pad($string, $length, $fillCharacter, STR_PAD_LEFT);
+	}
+
+	/**
 	 * @param $time
 	 * @return string
 	 */
 	public function getHumanAbleList($time) {
 		$diffSeconds = $time;
-		$years = floor($diffSeconds / 31556926);
-
-		$month = floor($diffSeconds / 262974383);
-		$month = str_pad($month, 2, "0", STR_PAD_LEFT);
-
-		$diffSeconds = $diffSeconds % 31556926;
-		$days = floor($diffSeconds / 86400);
-		$days = str_pad($days, 3, "0", STR_PAD_LEFT);
+		// is not needed
+		//		$years = floor($diffSeconds / 31556926);
+		//
+		//		$month = floor($diffSeconds / 262974383);
+		//		$month = $this->padString($month, 2, 0);
+		//
+		//		$diffSeconds = $diffSeconds % 31556926;
+		//		$days = floor($diffSeconds / 86400);
+		//		$days = $this->padString($days, 3, 0);
 
 		$diffSeconds = $diffSeconds % 86400;
 		$hours = floor($diffSeconds / 3600);
-		$hours = str_pad($hours, 1, " ", STR_PAD_LEFT);
+		$hours = $this->padString($hours, 1);
 		$diffSeconds = $diffSeconds % 3600;
 
 		$minutes = floor($diffSeconds / 60);
-		$minutes = str_pad($minutes, 2, " ", STR_PAD_LEFT);
+		$minutes = $this->padString($minutes, 2);
 
 		$diffSeconds = $diffSeconds % 60;
-		$diffSeconds = str_pad($diffSeconds, 2, " ", STR_PAD_LEFT);
+		$diffSeconds = $this->padString($diffSeconds, 2);
 
 		if ($hours > 0) {
 			$return = sprintf('%sh  %sm  %ss', $hours, $minutes, $diffSeconds);
@@ -94,6 +109,6 @@ class Calculate {
 			$return = sprintf('%sm  %ss', $minutes, $diffSeconds);
 		}
 
-		return str_pad($return, 13, ' ', STR_PAD_LEFT);
+		return $this->padString($return, 13);
 	}
 }

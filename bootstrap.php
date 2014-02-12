@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
+ */
+
 $includePath = get_include_path();
 $basePath = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 

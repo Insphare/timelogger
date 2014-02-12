@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Info
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Info extends Command_Stop {
 
@@ -16,7 +19,7 @@ class Command_Info extends Command_Stop {
 		$taskLabel = $workObject->getLabel();
 		$workObject->setStopped(time());
 
-		if (true === $workObject->hasBreakTime()) {
+		if (true === $workObject->hasActiveBreakTime()) {
 			$workObject->stopBreakTime();
 		}
 

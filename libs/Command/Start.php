@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Start
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Start extends Command_Abstract {
 
@@ -18,7 +21,7 @@ class Command_Start extends Command_Abstract {
 	 */
 	public function execute() {
 		$taskLabel = $this->getArgument(1);
-		$this->checkLength('Task name', $taskLabel, Command_Abstract::TASK_LENGTH);
+		$this->checkLength('Task name', $taskLabel, Command_Abstract::TASK_LENGTH_NAME);
 
 		if (empty($taskLabel)) {
 			$this->throwError('Please enter a task name.');

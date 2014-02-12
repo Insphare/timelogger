@@ -2,6 +2,9 @@
 
 /**
  * Class FileDirectoryIterator
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class FileDirectoryIterator {
 
@@ -41,7 +44,6 @@ class FileDirectoryIterator {
 	 * @throws InvalidArgumentException
 	 */
 	public function __construct($destination) {
-
 		if (!file_exists($destination)) {
 			throw new InvalidArgumentException('File-Path-Destination does not exists. ' . $destination);
 		}

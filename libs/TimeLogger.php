@@ -6,8 +6,8 @@ declare(ticks = 1);
 /**
  * Class Logger
  *
- * @author Manuel Will
- * @since 2013
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class TimeLogger {
 
@@ -338,7 +338,6 @@ class TimeLogger {
 			$this->stupidCounter = 0;
 		}
 		catch (Autoloader_Exception $e) {
-			//		throw new Command_Exception($e->getMessage());
 			$this->stupidCounter++;
 
 			if ($this->stupidCounter > 0 && !($this->stupidCounter % 3)) {

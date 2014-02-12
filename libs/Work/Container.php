@@ -2,6 +2,9 @@
 
 /**
  * Class Work_Container
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Work_Container {
 
@@ -130,7 +133,7 @@ class Work_Container {
 	/**
 	 * @return bool
 	 */
-	public function hasBreakTime() {
+	public function hasActiveBreakTime() {
 		return null !== $this->lastBreakTimeBegin;
 	}
 

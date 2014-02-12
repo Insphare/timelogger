@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Change
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Change extends Command_Stop {
 
@@ -14,7 +17,7 @@ class Command_Change extends Command_Stop {
 
 		$taskLabelOld = $workObject->getLabel();
 		$taskLabelNew = $this->getArgument(1);
-		$this->checkLength('Task name', $taskLabelNew, Command_Abstract::TASK_LENGTH);
+		$this->checkLength('Task name', $taskLabelNew, Command_Abstract::TASK_LENGTH_NAME);
 
 		if (empty($taskLabelNew)) {
 			$this->throwError('Please enter a new task name.');

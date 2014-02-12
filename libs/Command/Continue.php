@@ -2,6 +2,9 @@
 
 /**
  * Class Command_Continue
+ *
+ *  @author Manuel Will <insphare@gmail.com>
+ *  @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Continue extends Command_Pause {
 
@@ -14,7 +17,7 @@ class Command_Continue extends Command_Pause {
 
 		$workObject = $this->getWorkObject();
 
-		if (false === $workObject->hasBreakTime()) {
+		if (false === $workObject->hasActiveBreakTime()) {
 			throw new Command_Exception('Currently, you are not in breaking.');
 		}
 
