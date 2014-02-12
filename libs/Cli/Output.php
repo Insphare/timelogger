@@ -129,7 +129,7 @@ class Cli_Output {
 			throw new InvalidArgumentException('Unknown foreground color.');
 		}
 
-		return $this->foregroundColors{$colorName};
+		return $this->foregroundColors[$colorName];
 	}
 
 	/**
@@ -145,9 +145,12 @@ class Cli_Output {
 			throw new InvalidArgumentException('Unknown background color.');
 		}
 
-		return $this->backgroundColor{$colorName};
+		return $this->backgroundColor[$colorName];
 	}
 
+	/**
+	 *
+	 */
 	public function __destruct() {
 		$this->flush();
 	}
