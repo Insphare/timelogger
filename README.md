@@ -29,6 +29,6 @@ OR
 - entitled to create maybe missed directories on bootstrap
 
 
-@Suggestions:
+@suggestions:
 - Resume (start new work on last work name)
 - Edit (Edit a task of the day by argument: 0->file|timestamp_begin)	1->intSecond (+|-))
