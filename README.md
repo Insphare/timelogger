@@ -12,7 +12,7 @@ PHP-CLI time logger with prompt guiding the command line.
 
 
 @usage
-- sh logging.sh
+- sh start.sh
 OR
 - php logger.php
 
@@ -30,5 +30,6 @@ OR
 
 
 @suggestions:
+- bootstrap check fur extension pcntl.
 - Resume (start new work on last work name)
 - Edit (Edit a task of the day by argument: 0->file|timestamp_begin)	1->intSecond (+|-))
