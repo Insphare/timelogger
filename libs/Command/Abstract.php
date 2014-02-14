@@ -27,6 +27,8 @@ abstract class Command_Abstract {
 	 * @var array
 	 */
 	protected $lockStart = array(
+		'start',
+		'resume',
 		'stop',
 		'change',
 		'info',
@@ -150,6 +152,34 @@ abstract class Command_Abstract {
 	 */
 	protected function getCalculator() {
 		return $this->calculator;
+	}
+
+	protected function getWorkContainerByName($workName) {
+		$this->checkLength('Task name', $workName, Command_Abstract::TASK_LENGTH_NAME);
+
+		if (empty($workName)) {
+			$this->throwError('Please enter a task name.');
+		}
+
+		$workContainer = $this->getFileManager()->getWorkContainerByWorkName($workName);
+
+		if (empty($workContainer)) {
+			$workContainer = new Work_Container();
+			$workContainer->setStarted(time());
+			$workContainer->startWorkTime();
+			$workContainer->setLabel($workName);
+		}
+
+		return $workContainer;
+	}
+
+	/**
+	 * @return Work_Container
+	 */
+	protected function getWorkObjectFromCacheData() {
+		/** @var Work_Container $workObjectOrNull */
+		$workObjectOrNull = $this->loadCacheData('Start');
+		return $workObjectOrNull;
 	}
 
 	/**

@@ -15,13 +15,14 @@ class Command_Continue extends Command_Pause {
 	public function execute() {
 		$this->assertActiveLocking();
 
-		$workObject = $this->getWorkObject();
+		$workObject = $this->getWorkObjectFromCacheData();
 
 		if (false === $workObject->hasActiveBreakTime()) {
 			throw new Command_Exception('Currently, you are not in breaking.');
 		}
 
 		$workObject->stopBreakTime();
+		$workObject->startWorkTime();
 		$this->saveCacheData($workObject, 'Start');
 		$this->getFileManager()->lockActionsForCommands($this->lockStart);
 

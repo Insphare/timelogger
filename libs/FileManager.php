@@ -202,15 +202,36 @@ class FileManager {
 	}
 
 	/**
-	 * @param Work_Container $work
+	 * @param Work_Container $workContainerObject
 	 */
-	public function storeWork(Work_Container $work) {
-		$startTimestamp = $work->getStarted();
-		$label = strtolower($work->getLabel());
-		$label = preg_replace('~[^a-z0-9-]~i', '', $label);
-		$fileName = $this->dirTasks . $startTimestamp . '_' . $label . '.dat';
-		$fileData = $work->getAsArray();
+	public function storeWork(Work_Container $workContainerObject) {
+		$startTimeStamp = $workContainerObject->getStarted();
+		$startTimeStamp = date('Y-m-d 00:00:00', $startTimeStamp);
+		$startTimeStamp = strtotime($startTimeStamp);
+
+		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workContainerObject->getLabel());
+		$fileData = $workContainerObject->getAsArray();
 		$this->saveFile($fileName, $fileData);
+	}
+
+	public function getWorkContainerByWorkName($workName) {
+		$startTimeStamp = date('Y-m-d 00:00:00', time());
+		$startTimeStamp = strtotime($startTimeStamp);
+		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workName);
+		if (!file_exists($fileName)) {
+			return null;
+		}
+
+		$data = FileManager::get()->loadData($fileName);
+		$workContainerObject = new Work_LoadByData($data);
+		return $workContainerObject;
+	}
+
+	private function getWorkFilePathByName($timeStamp, $workName) {
+		$label = strtolower($workName);
+		$label = preg_replace('~[^a-z0-9-]~i', '', $label);
+		$fileName = $this->dirTasks . $timeStamp . '_' . $label . '.dat';
+		return $fileName;
 	}
 
 	/**

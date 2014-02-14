@@ -13,20 +13,23 @@ class Command_Change extends Command_Stop {
 	 */
 	public function execute() {
 		$this->assertActiveLocking();
-		$workObject = $this->getWorkObject();
+		$workObject = $this->getWorkObjectFromCacheData();
 
-		$taskLabelOld = $workObject->getLabel();
-		$taskLabelNew = $this->getArgument(1);
-		$this->checkLength('Task name', $taskLabelNew, Command_Abstract::TASK_LENGTH_NAME);
+		$lastWorkTimeBegin = $workObject->getLastWorkTimeBegin();
+		$workNameOld = $workObject->getLabel();
+		$workNameNew = $this->getArgument(1);
+		$workObjectFromFile = $this->getWorkContainerByName($workNameNew);
+		$this->assertArguments();
 
-		if (empty($taskLabelNew)) {
-			$this->throwError('Please enter a new task name.');
+		if (true === $workObjectFromFile->getIsNew()) {
+			$workObject->setLabel($workNameNew);
+			$this->saveCacheData($workObject, 'Start');
+		}
+		else {
+			$workObjectFromFile->setLastWorkTimeBegin($lastWorkTimeBegin);
+			$this->saveCacheData($workObjectFromFile, 'Start');
 		}
 
-		$this->assertArguments();
-		$workObject->setLabel($taskLabelNew);
-
-		$this->saveCacheData($workObject, 'Start');
-		return 'Change name from \'' . $taskLabelOld . '\' to \'' . $taskLabelNew . '\'';
+		return 'Change name from \'' . $workNameOld . '\' to \'' . $workNameNew . '\'';
 	}
 }

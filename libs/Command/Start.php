@@ -20,22 +20,26 @@ class Command_Start extends Command_Abstract {
 	 * @return string
 	 */
 	public function execute() {
-		$taskLabel = $this->getArgument(1);
-		$this->checkLength('Task name', $taskLabel, Command_Abstract::TASK_LENGTH_NAME);
-
-		if (empty($taskLabel)) {
-			$this->throwError('Please enter a task name.');
-		}
-
+		$output = array();
+		$workName = $this->getArgument(1);
 		$this->assertArguments();
 
-		$workObject = new Work_Container();
-		$workObject->setStarted(time());
-		$workObject->setLabel($taskLabel);
+		$workObject = $this->getWorkObjectFromCacheData();
+		if (null !== $workObject) {
+			$stopCommand = new Command_Stop($this->arguments);
+			$output[] = $stopCommand->execute();
+			$this->saveCacheData($workObject->getLabel(), 'Resume');
+		}
+
+		$workObject = $this->getWorkContainerByName($workName);
+		$workObject->startWorkTime();
+		$workObject->setLabel($workName);
 		$this->saveCacheData($workObject);
 
 		$this->getFileManager()->lockActionsForCommands($this->lockStart);
+		$output[] = 'Work on \'' . $workName . '\' started';
 
-		return 'Work on \'' . $taskLabel . '\' started';
+		return implode(PHP_EOL, $output);
 	}
+
 }

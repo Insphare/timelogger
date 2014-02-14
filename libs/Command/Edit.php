@@ -3,7 +3,7 @@
 /**
  * IN DEVELOPMENT
  *
- * Class Command_Edit
+ * Class Command_Edit  || FIx?
  *
  *  @author Manuel Will <insphare@gmail.com>
  *  @copyright Copyright (c) 2014, Manuel Will
@@ -35,7 +35,7 @@ class Command_Edit extends Command_Show {
 
 	}
 
-	private function getTask($work) {
+	private function getWork($work) {
 		$exceptionMessage = 'Work not found for current day.';
 
 		$files = $this->getFiles();
@@ -43,8 +43,6 @@ class Command_Edit extends Command_Show {
 		if (empty($files[$day])) {
 			throw new Command_Exception($exceptionMessage);
 		}
-
-		// load objects search by name?
 	}
 
 	private function handleAction($action, $work, $value) {

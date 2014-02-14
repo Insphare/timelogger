@@ -8,6 +8,8 @@
  */
 class Command_Show extends Command_Abstract {
 
+	const DURATION_SPACE = 13;
+
 	/**
 	 * @return string
 	 */
@@ -58,7 +60,6 @@ class Command_Show extends Command_Abstract {
 
 		$separator1 = str_pad('', 110, '-');
 		$separator2 = str_pad('', 41, '-');
-		$durationSpace = 13;
 
 		$data = array();
 		$data[] = '';
@@ -70,36 +71,51 @@ class Command_Show extends Command_Abstract {
 		$line[] = $this->fixTasksLength('Task') . $this->tabs(1);
 		$line[] = 'Start' . $this->tabs(2);
 		$line[] = 'Stop' . $this->tabs(2);
-		$line[] = $this->padLeft('Duration', $durationSpace) . $this->tabs(1);
-		$line[] = $this->padLeft('Break', $durationSpace) . $this->tabs(1);
-		$line[] = $this->padLeft('Round (h)', $durationSpace + 1);
+		$line[] = $this->padLeft('Duration', self::DURATION_SPACE) . $this->tabs(1);
+		$line[] = $this->padLeft('Break', self::DURATION_SPACE) . $this->tabs(1);
+		$line[] = $this->padLeft('Round (h)', self::DURATION_SPACE + 1);
 
 		$data[] = implode('', $line);
 		$data[] = $separator1;
 
 		$today = 0;
+		$todayWorked = 0;
 		$summaryBreak = 0;
 		$group = array();
+		$lines = array();
 
 		foreach ($workObjects as $workObject) {
-			$hourUnit = $this->getCalculator()->getHourUnit($workObject->getDuration());
-			$today += ($workObject->getDuration());
-			if (!isset($group[$workObject->getLabel()])) {
-				$group[$workObject->getLabel()] = 0;
+
+			$arrayWork = $workObject->getWorkTimeItems();
+			$arrayBreaks = $workObject->getBreakTimeItems();
+
+			foreach ($arrayWork as $arrRow) {
+				$start = (int)($arrRow['start']);
+				$stop = (int)($arrRow['stop']);
+				$duration = (int)($stop - $start);
+
+				if (!isset($group[$workObject->getLabel()])) {
+					$group[$workObject->getLabel()] = 0;
+				}
+
+				$group[$workObject->getLabel()] += ($duration);
+				$lines[$start] = $this->getLine( $workObject, $start, $stop );
 			}
-			$group[$workObject->getLabel()] += ($workObject->getDuration());
 
-			$line = array();
-			$line[] = $this->fixTasksLength($workObject->getLabel()) . $this->tabs(1);
-			$line[] = date('H:i:s', $workObject->getStarted()) . $this->tabs(1);
-			$line[] = date('H:i:s', $workObject->getStopped()) . $this->tabs(1);
-			$line[] = $this->getCalculator()->getHumanAbleList($workObject->getDuration()) . $this->tabs(1);
-			$line[] = $this->padLeft($this->getCalculator()->getHumanAbleList($workObject->getBreakTime()), $durationSpace);
-			$line[] = $this->padLeft($hourUnit, $durationSpace - 1);
+			foreach ($arrayBreaks as $arrRow) {
+				$start = (int)($arrRow['start']);
+				$stop = (int)($arrRow['stop']);
+				$lines[$start] = $this->getLine( $workObject, $start, $stop, true );
+			}
 
+			$todayWorked += $workObject->getWorkTime();
 			$summaryBreak += $workObject->getBreakTime();
 
-			$data[] = implode('', $line);
+		}
+
+		ksort($lines);
+		foreach ($lines as $line) {
+			$data[] = $line;
 		}
 		$data[] = $separator1;
 
@@ -198,5 +214,42 @@ class Command_Show extends Command_Abstract {
 		ksort($arrResult);
 
 		return $arrResult;
+	}
+
+
+
+	/**
+	 * @param Work_Container $workObject
+	 * @param $start
+	 * @param $stop
+	 * @param bool $isBreak
+	 *
+	 * @return array
+	 * @author Manuel Will
+	 * @since 2013
+	 */
+	protected function getLine( Work_Container $workObject, $start, $stop, $isBreak = false ) {
+		$duration = (int)($stop - $start);
+		$hourUnit = $this->getCalculator()->getHourUnit($duration);
+
+		$line = array();
+		$line[] = $this->fixTasksLength( $workObject->getLabel() ) . $this->tabs( 1 );
+		$line[] = date( 'H:i:s', $start ) . $this->tabs( 1 );
+		$line[] = date( 'H:i:s', $stop ) . $this->tabs( 1 );
+
+
+		if (true === $isBreak) {
+			$line[] = $this->getCalculator()->getHumanAbleList( 0 ) . $this->tabs( 1 );
+			$line[] = $this->padLeft( $this->getCalculator()->getHumanAbleList( $duration ), self::DURATION_SPACE );
+		}
+		else {
+			$line[] = $this->getCalculator()->getHumanAbleList( $duration ) . $this->tabs( 1 );
+			$line[] = $this->padLeft( $this->getCalculator()->getHumanAbleList( 0 ), self::DURATION_SPACE );
+		}
+
+		$line[] = $this->padLeft( $hourUnit, self::DURATION_SPACE - 1 );
+		$line = implode('', $line);
+
+		return $line;
 	}
 }

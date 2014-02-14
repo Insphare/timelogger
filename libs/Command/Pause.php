@@ -15,9 +15,13 @@ class Command_Pause extends Command_Stop {
 	public function execute() {
 		$this->assertActiveLocking();
 
-		$workObject = $this->getWorkObject();
+		$workObject = $this->getWorkObjectFromCacheData();
 		if (true === $workObject->hasActiveBreakTime()) {
 			throw new Command_Exception('Currently, this work is breaking.');
+		}
+
+		if ($workObject->hasActiveWorkTime()) {
+			$workObject->stopWorkTime();
 		}
 
 		$workObject->startBreakTime();

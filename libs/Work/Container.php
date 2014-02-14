@@ -6,44 +6,36 @@
  *  @author Manuel Will <insphare@gmail.com>
  *  @copyright Copyright (c) 2014, Manuel Will
  */
-class Work_Container {
+class Work_Container extends Work_Etter {
+
+
+
+	public function __construct() {
+		$this->isNew = true;
+	}
 
 	/**
-	 * @var string
+	 * @return int
 	 */
-	private $label = '';
+	public function getDuration() {
+		$this->calculate();
+		return $this->duration;
+	}
+
 
 	/**
-	 * @var int
+	 * @param int $stopped
 	 */
-	private $started = 0;
-
-	/**
-	 * @var int
-	 */
-	private $stopped = 0;
-
-	/**
-	 * @var int
-	 */
-	private $duration = 0;
-
-	/**
-	 * @var int
-	 */
-	private $lastBreakTimeBegin = null;
-
-	/**
-	 * @var array
-	 */
-	private $breakTime = array();
+	public function setStopped($stopped) {
+		$this->stopped = $stopped;
+		$this->calculate();
+	}
 
 	/**
 	 */
-	public function setDuration() {
-		$stop = $this->getStopped();
-		$start = $this->getStarted();
-		$duration = $stop - $start - $this->getBreakTime();
+	public function calculate() {
+		$workTime = $this->getWorkTime();
+		$duration = $workTime - $this->getBreakTime();
 		if ($duration < 0) {
 			$duration = 0;
 		}
@@ -51,68 +43,53 @@ class Work_Container {
 		$this->duration = (int)$duration;
 	}
 
+
 	/**
-	 * @return int
+	 *
 	 */
-	public function getDuration() {
-		$this->setDuration();
-		return $this->duration;
+	public function startWorkTime() {
+		$this->lastWorkTimeBegin = time();
 	}
 
 	/**
-	 * @param string $label
+	 * @return bool
 	 */
-	public function setLabel($label) {
-		$this->label = $label;
+	public function hasActiveWorkTime() {
+		return null !== $this->lastWorkTimeBegin;
 	}
 
 	/**
-	 * @return string
+	 *
 	 */
-	public function getLabel() {
-		return $this->label;
-	}
+	public function stopWorkTime() {
+		$currentTime = time();
+		$this->workTime[] = array(
+			'start' => $this->lastWorkTimeBegin,
+			'stop' => $currentTime,
+		);
 
-	/**
-	 * @param int $started
-	 */
-	public function setStarted($started) {
-		$this->started = $started;
-	}
-
-	/**
-	 * @return int
-	 */
-	public function getStarted() {
-		return $this->started;
-	}
-
-	/**
-	 * @param int $stopped
-	 */
-	public function setStopped($stopped) {
-		$this->stopped = $stopped;
-		$this->setDuration();
+		$this->lastWorkTimeBegin = null;
+		$this->stopped = $currentTime;
+		$this->calculate();
 	}
 
 	/**
 	 * @return int
 	 */
-	public function getStopped() {
-		return $this->stopped;
-	}
+	public function getWorkTime() {
+		$workTime = 0;
 
-	/**
-	 * @return array
-	 */
-	public function getAsArray() {
-		$data = array();
-		foreach ($this->getProperties() as $keyName => $memberVariableName) {
-			$data[$keyName] = $memberVariableName;
+		foreach ($this->workTime as $work) {
+			$stop = (int)$work['stop'];
+			$start = (int)$work['start'];
+			$diff = $stop - $start;
+			$workTime += $diff;
 		}
 
-		return $data;
+		return $workTime;
 	}
+
+
 
 	/**
 	 * @return int
@@ -156,24 +133,4 @@ class Work_Container {
 		$this->lastBreakTimeBegin = null;
 	}
 
-	/**
-	 * @param array $breakTime
-	 */
-	public function setBreakTime($breakTime) {
-		$this->breakTime = $breakTime;
-	}
-
-	/**
-	 * @param int $lastBreakTimeBegin
-	 */
-	public function setLastBreakTimeBegin($lastBreakTimeBegin) {
-		$this->lastBreakTimeBegin = $lastBreakTimeBegin;
-	}
-
-	/**
-	 * @return array
-	 */
-	protected function getProperties() {
-		return get_object_vars($this);
-	}
 }

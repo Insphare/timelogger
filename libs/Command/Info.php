@@ -14,10 +14,13 @@ class Command_Info extends Command_Stop {
 	public function execute() {
 		$this->assertActiveLocking();
 
-		$workObject = $this->getWorkObject();
+		$workObject = $this->getWorkObjectFromCacheData();
 
 		$taskLabel = $workObject->getLabel();
-		$workObject->setStopped(time());
+
+		if ($workObject->hasActiveWorkTime()) {
+			$workObject->stopWorkTime();
+		}
 
 		if (true === $workObject->hasActiveBreakTime()) {
 			$workObject->stopBreakTime();

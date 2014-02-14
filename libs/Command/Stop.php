@@ -13,11 +13,11 @@ class Command_Stop extends Command_Abstract {
 	 */
 	public function execute() {
 		$this->assertActiveLocking();
-		$workObject = $this->getWorkObject();
+		$workObject = $this->getWorkObjectFromCacheData();
 
 		$taskLabel = $workObject->getLabel();
-		$workObject->setStopped(time());
-
+		$workObject->stopWorkTime();
+		$workObject->setIsNew(false);
 		$this->getFileManager()->storeWork($workObject);
 		$this->saveCacheData(null, 'Start');
 		$this->getFileManager()->unlockCommands();
@@ -29,7 +29,8 @@ class Command_Stop extends Command_Abstract {
 	 * @return string
 	 */
 	protected function getDurationLine(Work_Container $workContainer) {
-		$duration = trim($this->getCalculator()->getHumanAbleList($workContainer->getDuration()));
+		$workContainer->calculate();
+		$duration = trim($this->getCalculator()->getHumanAbleList($workContainer->getWorkTime()));
 		$break = trim($this->getCalculator()->getHumanAbleList($workContainer->getBreakTime()));
 		return '(Duration: ' . $duration . ' excl. break: ' . $break . ')';
 	}
@@ -45,12 +46,5 @@ class Command_Stop extends Command_Abstract {
 		}
 	}
 
-	/**
-	 * @return Work_Container
-	 */
-	protected function getWorkObject() {
-		/** @var Work_Container $workObjectOrNull */
-		$workObjectOrNull = $this->loadCacheData('Start');
-		return $workObjectOrNull;
-	}
+
 }

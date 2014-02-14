@@ -13,6 +13,10 @@ class Calculate {
 	 * @return string
 	 */
 	public function getHourUnit($intSeconds) {
+		if ($intSeconds === 0) {
+			return '0,00';
+		}
+
 		$hourUnit = number_format(round(($intSeconds / 60) / 60, 3), 2, ',', '.');
 
 		$check = (int)$hourUnit{2} . (int)$hourUnit{3};
