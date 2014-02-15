@@ -48,7 +48,26 @@ abstract class Work_Etter {
 	 */
 	protected $breakTime = array();
 
+	/**
+	 * @var bool
+	 */
 	protected $isNew = false;
+
+	protected $markedAsActive = false;
+
+	/**
+	 * @param boolean $markColored
+	 */
+	public function setMarkedAsActive($markColored) {
+		$this->markedAsActive = (bool)$markColored;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getMarkedAsActive() {
+		return $this->markedAsActive;
+	}
 
 	/**
 	 * @param array $breakTime
@@ -131,10 +150,16 @@ abstract class Work_Etter {
 		$this->workTime = $workTime;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getWorkTimeItems() {
 		return $this->workTime;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getBreakTimeItems() {
 		return $this->breakTime;
 	}

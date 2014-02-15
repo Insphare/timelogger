@@ -112,7 +112,7 @@ class Cli_Output {
 			echo implode('', $this->output);
 		}
 
-		$this->output = array();
+		$this->reset();
 	}
 
 	/**
@@ -146,6 +146,22 @@ class Cli_Output {
 		}
 
 		return $this->backgroundColor[$colorName];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString() {
+		$return = implode('', $this->output);
+		$this->reset();
+		return $return;
+	}
+
+	/**
+	 *
+	 */
+	public function reset() {
+		$this->output = array();
 	}
 
 	/**

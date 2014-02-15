@@ -25,17 +25,6 @@ class Command_Stop extends Command_Abstract {
 	}
 
 	/**
-	 * @param Work_Container $workContainer
-	 * @return string
-	 */
-	protected function getDurationLine(Work_Container $workContainer) {
-		$workContainer->calculate();
-		$duration = trim($this->getCalculator()->getHumanAbleList($workContainer->getWorkTime()));
-		$break = trim($this->getCalculator()->getHumanAbleList($workContainer->getBreakTime()));
-		return '(Duration: ' . $duration . ' excl. break: ' . $break . ')';
-	}
-
-	/**
 	 *
 	 */
 	protected function assertActiveLocking() {

@@ -15,7 +15,6 @@ class Command_Info extends Command_Stop {
 		$this->assertActiveLocking();
 
 		$workObject = $this->getWorkObjectFromCacheData();
-
 		$taskLabel = $workObject->getLabel();
 
 		if ($workObject->hasActiveWorkTime()) {

@@ -33,6 +33,7 @@ abstract class Command_Abstract {
 		'change',
 		'info',
 		'pause',
+		'show',
 	);
 
 	/**
@@ -41,6 +42,7 @@ abstract class Command_Abstract {
 	protected $lockBreak = array(
 		'continue',
 		'info',
+		'show',
 	);
 
 	/**
@@ -70,9 +72,15 @@ abstract class Command_Abstract {
 	/**
 	 * @throws Command_Exception
 	 */
-	protected function assertArguments() {
+	protected function assertArguments($overwriteText = null) {
+		$message = 'This command requires arguments.';
+
+		if (null !== $overwriteText) {
+			$message = $overwriteText;
+		}
+
 		if (empty($this->arguments)) {
-			throw new Command_Exception('This command requires arguments.');
+			throw new Command_Exception($message);
 		}
 	}
 
@@ -93,6 +101,17 @@ abstract class Command_Abstract {
 	 */
 	protected function getFileManager() {
 		return FileManager::get();
+	}
+
+	/**
+	 * @param Work_Container $workContainer
+	 * @return string
+	 */
+	protected function getDurationLine(Work_Container $workContainer) {
+		$workContainer->calculate();
+		$duration = trim($this->getCalculator()->getHumanAbleList($workContainer->getWorkTime()));
+		$break = trim($this->getCalculator()->getHumanAbleList($workContainer->getBreakTime()));
+		return '(Duration: ' . $duration . ' excl. break: ' . $break . ')';
 	}
 
 	/**

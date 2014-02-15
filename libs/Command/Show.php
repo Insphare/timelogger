@@ -9,15 +9,72 @@
 class Command_Show extends Command_Abstract {
 
 	/**
+	 * Length
+	 */
+	const DURATION_SPACE_LENGTH = 13;
+
+	/**
 	 *
 	 */
-	const DURATION_SPACE = 13;
+	const SEPARATOR_ONE_LENGTH = 110;
+	/**
+	 *
+	 */
+	const SEPARATOR_TWO_LENGTH = 81;
+
+	/**
+	 * @var CLI_Output
+	 */
+	private static $output = null;
+
+	/**
+	 * @var array
+	 */
+	private $finallyOutput = array();
 
 	/**
 	 * @return string
 	 */
 	public function execute() {
-		return $this->getDay(time());
+		$day = $this->getDay(time());
+		return $day;
+	}
+
+	/**
+	 * @param bool $reset
+	 * @return Cli_Output
+	 */
+	private function getTempLineObject($reset = false) {
+		if (null === self::$output) {
+			self::$output = new Cli_Output();
+		}
+
+		if (true === $reset) {
+			self::$output->reset();
+		}
+
+		return self::$output;
+	}
+
+	/**
+	 * @param $string
+	 * @param int $amountTabulators
+	 */
+	private function appendToTemp($string, $amountTabulators = 0) {
+		$this->getTempLineObject()->createLine($string, false);
+
+		if ($amountTabulators > 0) {
+			$this->getTempLineObject()->createLine($this->generateTabulatorByAmount($amountTabulators), false);
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getTempLine() {
+		$string = (string)$this->getTempLineObject();
+		$this->getTempLineObject(true);
+		return $string;
 	}
 
 	/**
@@ -25,7 +82,7 @@ class Command_Show extends Command_Abstract {
 	 *
 	 * @return string
 	 */
-	private function tabs($amount) {
+	private function generateTabulatorByAmount($amount) {
 		$str = '';
 		$count = 0;
 
@@ -46,112 +103,8 @@ class Command_Show extends Command_Abstract {
 	 *
 	 * @return string
 	 */
-	private function padLeft($string, $amount) {
+	private function padWithSpaceToLeft($string, $amount) {
 		return str_pad($string, $amount, ' ', STR_PAD_LEFT);
-	}
-
-	/**
-	 * @param $timestamp
-	 * @return string
-	 */
-	protected function getDay($timestamp) {
-		$workObjects = $this->getWorkedObject($timestamp);
-
-		if (empty($workObjects)) {
-			return 'There are no logs, yet.';
-		}
-
-		$separator1 = str_pad('', 110, '-');
-		$separator2 = str_pad('', 41, '-');
-
-		$data = array();
-		$data[] = '';
-		$data[] = $separator1;
-		$data[] = 'Details (' . date('Y-m-d', $timestamp) . ')';
-		$data[] = $separator1;
-
-		$line = array();
-		$line[] = $this->fixTasksLength('Task') . $this->tabs(1);
-		$line[] = 'Start' . $this->tabs(2);
-		$line[] = 'Stop' . $this->tabs(2);
-		$line[] = $this->padLeft('Duration', self::DURATION_SPACE) . $this->tabs(1);
-		$line[] = $this->padLeft('Break', self::DURATION_SPACE) . $this->tabs(1);
-		$line[] = $this->padLeft('Round (h)', self::DURATION_SPACE + 1);
-
-		$data[] = implode('', $line);
-		$data[] = $separator1;
-
-		$todayWorked = 0;
-		$summaryBreak = 0;
-		$group = array();
-		$tmpLines = array();
-
-		foreach ($workObjects as $workObject) {
-
-			$arrayWork = $workObject->getWorkTimeItems();
-			$arrayBreaks = $workObject->getBreakTimeItems();
-
-			foreach ($arrayWork as $arrRow) {
-				$start = (int)($arrRow['start']);
-				$stop = (int)($arrRow['stop']);
-				$duration = (int)($stop - $start);
-
-				if (!isset($group[$workObject->getLabel()])) {
-					$group[$workObject->getLabel()] = 0;
-				}
-
-				$group[$workObject->getLabel()] += ($duration);
-				$tmpLines[$start] = $this->getLine($workObject, $start, $stop);
-			}
-
-			foreach ($arrayBreaks as $arrRow) {
-				$start = (int)($arrRow['start']);
-				$stop = (int)($arrRow['stop']);
-				$tmpLines[$start] = $this->getLine($workObject, $start, $stop, true);
-			}
-
-			$todayWorked += $workObject->getWorkTime();
-			$summaryBreak += $workObject->getBreakTime();
-		}
-
-		ksort($tmpLines);
-		$this->appendLinesToData($data, $tmpLines);
-
-		$tmpLines = array();
-		$summaryTime = 0;
-
-		foreach ($group as $task => $seconds) {
-			$rounded = $this->getCalculator()->getHourUnit($seconds);
-			$summaryTime += $this->fixStringToFloat($rounded);
-			$tmpLines[] = $this->fixTasksLength($task) . $this->tabs(1) . $rounded;
-		}
-
-		$data[] = $separator1;
-		$data[] = $this->fixTasksLength('Summary') . $this->tabs(6) . ' ' . $this->fixFloatToString($summaryTime) . $this->tabs(2) . ' ' . $this->fixFloatToString($summaryBreak);
-		$data[] = $separator1;
-
-		// summary
-		$data[] = '';
-		$data[] = '';
-		$data[] = $separator2;
-		$data[] = $this->fixTasksLength('Task') . $this->tabs(1) . 'Log hours';
-		$data[] = $separator2;
-
-		$this->appendLinesToData($data, $tmpLines);
-
-		$data[] = $separator2;
-
-		return implode(PHP_EOL, $data);
-	}
-
-	/**
-	 * @param $data
-	 * @param array $lines
-	 */
-	private function appendLinesToData(&$data, array $lines) {
-		foreach ($lines as $line) {
-			$data[] = $line;
-		}
 	}
 
 	/**
@@ -192,7 +145,7 @@ class Command_Show extends Command_Abstract {
 	 * @param $timestampToday
 	 * @return Work_Container[]
 	 */
-	protected function getWorkedObject($timestampToday) {
+	protected function getWorkedObjects($timestampToday) {
 		/**
 		 * @var $arrObjects Work_Container[]
 		 */
@@ -205,6 +158,19 @@ class Command_Show extends Command_Abstract {
 				$work = new Work_LoadByData($data);
 				$arrObjects[$work->getStarted()] = $work;
 			}
+		}
+
+		$workObject = $this->getWorkObjectFromCacheData();
+		if (!empty($workObject) && $workObject instanceof Work_Container) {
+			if ($workObject->hasActiveWorkTime()) {
+				$workObject->stopWorkTime();
+			}
+
+			if (true === $workObject->hasActiveBreakTime()) {
+				$workObject->stopBreakTime();
+			}
+			$workObject->setMarkedAsActive(true);
+			$arrObjects[$workObject->getStarted()] = $workObject;
 		}
 
 		ksort($arrObjects);
@@ -244,27 +210,193 @@ class Command_Show extends Command_Abstract {
 	 * @author Manuel Will
 	 * @since 2013
 	 */
-	protected function getLine(Work_Container $workObject, $start, $stop, $isBreak = false) {
+	protected function getDetailLine(Work_Container $workObject, $start, $stop, $isBreak = false) {
 		$duration = (int)($stop - $start);
 		$hourUnit = $this->getCalculator()->getHourUnit($duration);
 
 		$line = array();
-		$line[] = $this->fixTasksLength($workObject->getLabel()) . $this->tabs(1);
-		$line[] = date('H:i:s', $start) . $this->tabs(1);
-		$line[] = date('H:i:s', $stop) . $this->tabs(1);
+		$line[] = $this->fixTasksLength($workObject->getLabel()) . $this->generateTabulatorByAmount(1);
+		$line[] = date('H:i:s', $start) . $this->generateTabulatorByAmount(1);
+		$line[] = date('H:i:s', $stop) . $this->generateTabulatorByAmount(1);
 
 		if (true === $isBreak) {
-			$line[] = $this->getCalculator()->getHumanAbleList(0) . $this->tabs(1);
-			$line[] = $this->padLeft($this->getCalculator()->getHumanAbleList($duration), self::DURATION_SPACE);
+			$line[] = $this->getCalculator()->getHumanAbleList(0) . $this->generateTabulatorByAmount(1);
+			$line[] = $this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList($duration), self::DURATION_SPACE_LENGTH);
 		}
 		else {
-			$line[] = $this->getCalculator()->getHumanAbleList($duration) . $this->tabs(1);
-			$line[] = $this->padLeft($this->getCalculator()->getHumanAbleList(0), self::DURATION_SPACE);
+			$line[] = $this->getCalculator()->getHumanAbleList($duration) . $this->generateTabulatorByAmount(1);
+			$line[] = $this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList(0), self::DURATION_SPACE_LENGTH);
 		}
 
-		$line[] = $this->padLeft($hourUnit, self::DURATION_SPACE - 1);
+		$line[] = $this->padWithSpaceToLeft($hourUnit, self::DURATION_SPACE_LENGTH - 1);
 		$line = implode('', $line);
 
 		return $line;
+	}
+
+	/**
+	 * @param $mxValue
+	 */
+	private function appendToOutput($mxValue) {
+		if (is_array($mxValue)) {
+			foreach ($mxValue as $line) {
+				$this->finallyOutput[] = $line;
+			}
+		}
+		else {
+			$this->finallyOutput[] = $mxValue;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getSeparatorLineOne() {
+		return str_pad('', self::SEPARATOR_ONE_LENGTH, '-');
+	}
+
+	/**
+	 * @return string
+	 */
+	private function getSeparatorLineTwo() {
+		return str_pad('', self::SEPARATOR_TWO_LENGTH, '-');
+	}
+
+	/**
+	 * @param $timestamp
+	 * @return string
+	 */
+	protected function getDay($timestamp) {
+		$workObjects = $this->getWorkedObjects($timestamp);
+
+		if (empty($workObjects)) {
+			return 'There are no logs, yet.';
+		}
+
+		$this->appendToOutput('');
+		$this->appendToOutput(str_pad('', 30, '='));
+		$this->appendToOutput(':: Overview from ' . date('Y-m-d', $timestamp) . ' ::');
+		$this->appendToOutput(str_pad('', 30, '='));
+		$this->appendToOutput('');
+
+		$this->appendToOutput($this->getSeparatorLineOne());
+		$this->appendToTemp($this->fixTasksLength('Task'), 1);
+		$this->appendToTemp('Start', 2);
+		$this->appendToTemp('Stop', 2);
+		$this->appendToTemp($this->padWithSpaceToLeft('Duration', self::DURATION_SPACE_LENGTH), 1);
+		$this->appendToTemp($this->padWithSpaceToLeft('Break', self::DURATION_SPACE_LENGTH), 1);
+		$this->appendToTemp($this->padWithSpaceToLeft('Round (h)', self::DURATION_SPACE_LENGTH), 1);
+
+		$this->appendToOutput($this->getTempLine());
+		$this->appendToOutput($this->getSeparatorLineOne());
+
+		$todayWorked = 0;
+		$summaryBreak = 0;
+		$group = array();
+		$tmpLines = array();
+		$isActive = false;
+
+		foreach ($workObjects as $workObject) {
+			$arrayWork = $workObject->getWorkTimeItems();
+			$arrayBreaks = $workObject->getBreakTimeItems();
+
+			if (true === $workObject->getMarkedAsActive()) {
+				$isActive = true;
+			}
+
+			if (!isset($group[$workObject->getLabel()])) {
+				$group[$workObject->getLabel()] = array(
+					'work' => 0,
+					'break' => 0
+				);
+			}
+
+			/**
+			 * detail lines from work
+			 */
+			foreach ($arrayWork as $arrRow) {
+				$start = (int)($arrRow['start']);
+				$stop = (int)($arrRow['stop']);
+				$duration = (int)($stop - $start);
+				$tmpLines[$start] = $this->getDetailLine($workObject, $start, $stop);
+
+				$group[$workObject->getLabel()]['work'] += ($duration);
+			}
+
+			/**
+			 * detail lines from break
+			 */
+			foreach ($arrayBreaks as $arrRow) {
+				$start = (int)($arrRow['start']);
+				$stop = (int)($arrRow['stop']);
+				$duration = (int)($stop - $start);
+				$tmpLines[$start] = $this->getDetailLine($workObject, $start, $stop, true);
+
+				$group[$workObject->getLabel()]['break'] += ($duration);
+			}
+
+			$todayWorked += $workObject->getWorkTime();
+			$summaryBreak += $workObject->getBreakTime();
+		}
+
+		ksort($tmpLines);
+
+		if (true === $isActive) {
+			$lastItem = array_pop($tmpLines);
+			$tmpLines[] = $this->getSeparatorLineOne();
+			$tmpLines[] = $lastItem;
+		}
+
+		$this->appendToOutput($tmpLines);
+
+		$tmpLines = array();
+		$summaryTime = 0;
+
+		foreach ($group as $task => $data) {
+			$workSeconds = $data['work'];
+			$breakSeconds = $data['break'];
+			$rounded = $this->getCalculator()->getHourUnit($workSeconds);
+			$summaryTime += $this->fixStringToFloat($rounded);
+
+			$this->appendToTemp($this->fixTasksLength($task), 1);
+			$this->appendToTemp($this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList($workSeconds), self::DURATION_SPACE_LENGTH), 1);
+			$this->appendToTemp($this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList($breakSeconds), self::DURATION_SPACE_LENGTH), 2);
+			$this->appendToTemp($rounded);
+			$tmpLines[] = $this->getTempLine();
+		}
+
+		$summaryBreak = $this->getCalculator()->getHourUnit($summaryBreak);
+		$this->appendToOutput($this->getSeparatorLineOne());
+
+		$this->appendToOutput('');
+		$this->appendToOutput('');
+		$this->appendToOutput($this->getSeparatorLineOne());
+		$this->appendToTemp($this->fixTasksLength('Summary'), 6);
+		$this->appendToTemp('');
+
+		$this->appendToTemp($this->fixFloatToString($summaryTime), 2);
+		$this->appendToTemp($summaryBreak);
+		$this->appendToOutput($this->getTempLine());
+
+		$this->appendToOutput($this->getSeparatorLineOne());
+
+		// summary
+		$this->appendToOutput('');
+		$this->appendToOutput('');
+		$this->appendToOutput('');
+		$this->appendToOutput($this->getSeparatorLineTwo());
+
+		$this->appendToTemp($this->fixTasksLength('Task'), 1);
+		$this->appendToTemp($this->padWithSpaceToLeft('Duration', self::DURATION_SPACE_LENGTH), 1);
+		$this->appendToTemp($this->padWithSpaceToLeft('Break', self::DURATION_SPACE_LENGTH), 2);
+		$this->appendToTemp('Log hours');
+
+		$this->appendToOutput($this->getTempLine());
+		$this->appendToOutput($this->getSeparatorLineTwo());
+
+		$this->appendToOutput($tmpLines);
+		$this->appendToOutput($this->getSeparatorLineTwo());
+
+		return implode(PHP_EOL, $this->finallyOutput);
 	}
 }

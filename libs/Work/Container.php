@@ -8,6 +8,9 @@
  */
 class Work_Container extends Work_Etter {
 
+	/**
+	 *
+	 */
 	public function __construct() {
 		$this->isNew = true;
 	}
@@ -67,6 +70,17 @@ class Work_Container extends Work_Etter {
 		$this->lastWorkTimeBegin = null;
 		$this->stopped = $currentTime;
 		$this->calculate();
+	}
+
+	/**
+	 * @param $start
+	 * @param $durationInSeconds
+	 */
+	public function appendManualWorkTime($start, $durationInSeconds) {
+		$this->workTime[] = array(
+			'start' => $start,
+			'stop' => $start + $durationInSeconds,
+		);
 	}
 
 	/**

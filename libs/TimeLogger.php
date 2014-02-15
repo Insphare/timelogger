@@ -231,6 +231,7 @@ class TimeLogger {
 			'resume		- Resume previous work',
 			'show		- Show tasks',
 			'export		- Export all to text files',
+			'append		- Append time to work',
 			'help		- Show help.',
 			'exit		- Exit',
 		);
