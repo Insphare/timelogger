@@ -3,8 +3,8 @@
 /**
  * Class FileServer
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class FileManager {
 
@@ -214,6 +214,10 @@ class FileManager {
 		$this->saveFile($fileName, $fileData);
 	}
 
+	/**
+	 * @param $workName
+	 * @return null|Work_LoadByData
+	 */
 	public function getWorkContainerByWorkName($workName) {
 		$startTimeStamp = date('Y-m-d 00:00:00', time());
 		$startTimeStamp = strtotime($startTimeStamp);
@@ -227,8 +231,23 @@ class FileManager {
 		return $workContainerObject;
 	}
 
+	/**
+	 * @param $timeStamp
+	 * @param $workName
+	 * @return string
+	 */
 	private function getWorkFilePathByName($timeStamp, $workName) {
 		$label = strtolower($workName);
+		$replace = array(
+			'ö' => 'oe',
+			'ä' => 'ae',
+			'ü' => 'ue'
+		);
+
+		foreach ($replace as $searchPattern => $replacePattern) {
+			$label = str_replace($searchPattern, $replacePattern, $label);
+		}
+
 		$label = preg_replace('~[^a-z0-9-]~i', '', $label);
 		$fileName = $this->dirTasks . $timeStamp . '_' . $label . '.dat';
 		return $fileName;

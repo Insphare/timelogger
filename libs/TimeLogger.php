@@ -6,10 +6,15 @@ declare(ticks = 1);
 /**
  * Class Logger
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class TimeLogger {
+
+	/**
+	 * Version number
+	 */
+	const VERSION = 'v.1.1';
 
 	/**
 	 * @var bool
@@ -46,14 +51,14 @@ class TimeLogger {
 	 */
 	public function __construct() {
 		// Prevent breaking out of the console.
-		$this->registryHandler();
+		$this->registHandler();
 		$this->cliOutput = new Cli_Output();
 	}
 
 	/**
 	 * Prevent breaking out of the console.
 	 */
-	private function registryHandler() {
+	private function registHandler() {
 		pcntl_signal(SIGINT, array(
 			$this,
 			'signalHandler'
@@ -70,7 +75,7 @@ class TimeLogger {
 	 */
 	protected function setAndGetPromptLine($showLine = true) {
 		if (true === $showLine) {
-			$this->printLine('Time logger v.1.0 © Manuel Will', true, Cli_Output::COLOR_DARK_GREY);
+			$this->printLine('Time logger ' . self::VERSION . ' © Manuel Will', true, Cli_Output::COLOR_DARK_GREY);
 			$this->printLine('> ', false, Cli_Output::COLOR_LIGHT_BLUE);
 		}
 
@@ -79,7 +84,7 @@ class TimeLogger {
 		$handle = fopen('php://stdin', 'r');
 		$line = fgets($handle);
 
-		return trim(strtolower($line));
+		return trim($line);
 	}
 
 	/**
@@ -99,7 +104,6 @@ class TimeLogger {
 	 * @since 2013
 	 */
 	public function run() {
-		//$this->printLine('Welcome!');
 		$this->printWelcome();
 
 		while (true) {
@@ -107,33 +111,40 @@ class TimeLogger {
 			$this->executeCommand($userInput);
 
 			if (true === $this->breakSignal) {
-				$counter = 0;
-				$this->printLine('');
-				$message = 'You wanted to kill the current running script. Would you like end it now? [Y/N] ';
-				$this->printLine($message, false, Cli_Output::COLOR_LIGHT_PURPLE);
-				while (true) {
-					$userInput = $this->setAndGetPromptLine(false);
-					switch ($userInput) {
-						case 'y':
-							$this->printByeBye();
-							exit(1);
+				$this->confirmToExit();
+			}
+		}
+	}
 
-						case 'n':
-							$this->breakSignal = false;
-							$this->showHelp();
-							break 2;
+	/**
+	 *
+	 */
+	private function confirmToExit() {
+		$counter = 0;
+		$this->printLine('');
+		$message = 'You wanted to kill the current running script. Would you like end it now? [Y/N] ';
+		$this->printLine($message, false, Cli_Output::COLOR_LIGHT_PURPLE);
+		while (true) {
+			$userInput = $this->setAndGetPromptLine(false);
+			switch ($userInput) {
+				case 'y':
+					$this->printByeBye();
+					exit(1);
 
-						default:
-							$this->printLine('Wrong input.', true, Cli_Output::COLOR_LIGHT_YELLOW);
-							$counter++;
-							if ($counter > 2) {
-								$this->breakSignal = false;
-								$this->printLine('');
-								$this->printCoffee();
-								break 2;
-							}
+				case 'n':
+					$this->breakSignal = false;
+					$this->showHelp();
+					break 2;
+
+				default:
+					$this->printLine('Wrong input.', true, Cli_Output::COLOR_LIGHT_YELLOW);
+					$counter++;
+					if ($counter > 2) {
+						$this->breakSignal = false;
+						$this->printLine('');
+						$this->printCoffee();
+						break 2;
 					}
-				}
 			}
 		}
 	}
@@ -172,6 +183,9 @@ class TimeLogger {
 		$this->printLine($message, true, Cli_Output::COLOR_LIGHT_RED);
 	}
 
+	/**
+	 *
+	 */
 	private function printWelcome() {
 		$this->printImage('welcome.dat');
 	}
@@ -214,6 +228,7 @@ class TimeLogger {
 			'info		- Information about the current work',
 			'pause		- Pause the current work',
 			'continue	- Continue the work',
+			'resume		- Resume previous work',
 			'show		- Show tasks',
 			'export		- Export all to text files',
 			'help		- Show help.',
@@ -247,72 +262,31 @@ class TimeLogger {
 	 * @since 2013
 	 */
 	private function executeCommand($commandLine) {
-
 		try {
-			$line = trim($commandLine);
-			$line = trim(str_replace('  ', ' ', $line));
+			$line = $this->prepareInput($commandLine);
 
 			if (empty($line)) {
-
-				if (true === $this->isEmptyCommand) {
-					$this->boringCounter++;
-				}
-
-				if ($this->boringCounter > 0 && !($this->boringCounter % 3)) {
-					$this->printWtfBoring();
-				}
-				elseif ($this->boringCounter > 0 && !($this->boringCounter % 5)) {
-					$wtf = array(
-						'lampman.dat',
-						'sleep.dat',
-						'caniplay.dat',
-						'policestop1.dat',
-					);
-					shuffle($wtf);
-					$this->preventHelp = true;
-					$this->printImage($wtf[0]);
-				}
-
-				$this->isEmptyCommand = true;
-				throw new Command_Exception();
+				// throws an exception
+				$this->processWhenInputIsEmpty();
 			}
 
 			$this->isEmptyCommand = false;
-
 			$line = explode(' ', $line);
-
-			$commandOperator = strtolower($line[0]);
-			$commandClass = 'Command_' . ucfirst($commandOperator);
+			$commandName = strtolower($line[0]);
+			$commandClass = 'Command_' . ucfirst($commandName);
 			unset($line[0]);
 			$arguments = $line;
 
 			// check whether the current command is allowed or blocked.
-			if (true === $this->getFileManager()->isLockedAndCurrentCommandIsDisallowed($commandOperator)) {
-				$commandsAllowed = array();
-
-				$cmd = $this->getFileManager()->getLockActions();
-				foreach ($cmd as $cmdName) {
-					$commandsAllowed[$cmdName] = "'" . $cmdName . "'";
-				}
-
-				$message = 'Next you have to be perform ' . implode(' or ', $commandsAllowed) . '.';
-				throw new Command_Exception($message);
-			}
+			$this->assertCommandIsAllowed($commandName);
 
 			if (!empty($commandLine)) {
-				$this->executeCommandClass($commandClass, $arguments);
-
-				switch ($commandOperator) {
-					case 'exit':
-						$this->printByeBye();
-						sleep(1);
-						exit(1);
-						break;
-
-					case 'help':
-						$this->showHelp();
-						break;
+				if ($commandLine === 'show') {
+					// clear
+					$this->printLine(chr(12));
 				}
+				$this->executeCommandClass($commandClass, $arguments);
+				$this->executeCommandCallback($commandName);
 			}
 			else {
 				$this->showHelp();
@@ -321,6 +295,77 @@ class TimeLogger {
 		catch (Command_Exception $e) {
 			$this->showHelp($e->getMessage());
 		}
+	}
+
+	/**
+	 * @param $commandName
+	 */
+	private function executeCommandCallback($commandName) {
+		switch ($commandName) {
+			case 'exit':
+				$this->printByeBye();
+				exit(1);
+				break;
+
+			case 'help':
+				$this->showHelp();
+				break;
+		}
+	}
+
+	/**
+	 * @param $commandName
+	 * @throws Command_Exception
+	 */
+	private function assertCommandIsAllowed($commandName) {
+		if (true === $this->getFileManager()->isLockedAndCurrentCommandIsDisallowed($commandName)) {
+			$commandsAllowed = array();
+
+			$commandsTheyAreAllowed = $this->getFileManager()->getLockActions();
+			foreach ($commandsTheyAreAllowed as $cmdName) {
+				$commandsAllowed[$cmdName] = "'" . $cmdName . "'";
+			}
+
+			$message = 'Next you have to be perform ' . implode(' or ', $commandsAllowed) . '.';
+			throw new Command_Exception($message);
+		}
+	}
+
+	/**
+	 * @throws Command_Exception
+	 */
+	private function processWhenInputIsEmpty() {
+		if (true === $this->isEmptyCommand) {
+			$this->boringCounter++;
+		}
+
+		if ($this->boringCounter > 0 && !($this->boringCounter % 3)) {
+			$this->printWtfBoring();
+		}
+		elseif ($this->boringCounter > 0 && !($this->boringCounter % 5)) {
+			$wtf = array(
+				'lampman.dat',
+				'sleep.dat',
+				'caniplay.dat',
+				'policestop1.dat',
+			);
+			shuffle($wtf);
+			$this->preventHelp = true;
+			$this->printImage($wtf[0]);
+		}
+
+		$this->isEmptyCommand = true;
+		throw new Command_Exception();
+	}
+
+	/**
+	 * @param $string
+	 * @return string
+	 */
+	private function prepareInput($string) {
+		$string = trim($string);
+		$string = trim(str_replace('  ', ' ', $string));
+		return $string;
 	}
 
 	/**

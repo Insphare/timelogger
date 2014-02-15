@@ -26,7 +26,7 @@ class Command_Continue extends Command_Pause {
 		$this->saveCacheData($workObject, 'Start');
 		$this->getFileManager()->lockActionsForCommands($this->lockStart);
 
-		$string = 'Resuming on task \'' . $workObject->getLabel() . '\'';
+		$string = 'Resuming on task \'' . $workObject->getLabel() . '\'.';
 		return $string;
 	}
 }

@@ -28,7 +28,7 @@ class Command_Pause extends Command_Stop {
 		$this->saveCacheData($workObject, 'Start');
 		$this->getFileManager()->lockActionsForCommands($this->lockBreak);
 
-		$string = 'Breaking on task \'' . $workObject->getLabel() . '\'';
+		$string = 'Breaking on task \'' . $workObject->getLabel() . '\'.';
 		return $string;
 	}
 }

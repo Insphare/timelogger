@@ -192,7 +192,7 @@ abstract class Command_Abstract {
 	 * @return string
 	 */
 	protected function callForeignCommand($name, array $arguments) {
-		$className = 'Command_'.ucfirst($name);
+		$className = 'Command_' . ucfirst($name);
 		/** @var Command_Abstract $stopCommand */
 		$stopCommand = new $className($arguments);
 		return $stopCommand->execute();

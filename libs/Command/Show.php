@@ -8,6 +8,9 @@
  */
 class Command_Show extends Command_Abstract {
 
+	/**
+	 *
+	 */
 	const DURATION_SPACE = 13;
 
 	/**
@@ -78,11 +81,10 @@ class Command_Show extends Command_Abstract {
 		$data[] = implode('', $line);
 		$data[] = $separator1;
 
-		$today = 0;
 		$todayWorked = 0;
 		$summaryBreak = 0;
 		$group = array();
-		$lines = array();
+		$tmpLines = array();
 
 		foreach ($workObjects as $workObject) {
 
@@ -99,48 +101,57 @@ class Command_Show extends Command_Abstract {
 				}
 
 				$group[$workObject->getLabel()] += ($duration);
-				$lines[$start] = $this->getLine($workObject, $start, $stop);
+				$tmpLines[$start] = $this->getLine($workObject, $start, $stop);
 			}
 
 			foreach ($arrayBreaks as $arrRow) {
 				$start = (int)($arrRow['start']);
 				$stop = (int)($arrRow['stop']);
-				$lines[$start] = $this->getLine($workObject, $start, $stop, true);
+				$tmpLines[$start] = $this->getLine($workObject, $start, $stop, true);
 			}
 
 			$todayWorked += $workObject->getWorkTime();
 			$summaryBreak += $workObject->getBreakTime();
 		}
 
-		ksort($lines);
-		foreach ($lines as $line) {
-			$data[] = $line;
+		ksort($tmpLines);
+		$this->appendLinesToData($data, $tmpLines);
+
+		$tmpLines = array();
+		$summaryTime = 0;
+
+		foreach ($group as $task => $seconds) {
+			$rounded = $this->getCalculator()->getHourUnit($seconds);
+			$summaryTime += $this->fixStringToFloat($rounded);
+			$tmpLines[] = $this->fixTasksLength($task) . $this->tabs(1) . $rounded;
 		}
+
+		$data[] = $separator1;
+		$data[] = $this->fixTasksLength('Summary') . $this->tabs(6) . ' ' . $this->fixFloatToString($summaryTime) . $this->tabs(2) . ' ' . $this->fixFloatToString($summaryBreak);
 		$data[] = $separator1;
 
-		$data[] = '';
-
 		// summary
+		$data[] = '';
 		$data[] = '';
 		$data[] = $separator2;
 		$data[] = $this->fixTasksLength('Task') . $this->tabs(1) . 'Log hours';
 		$data[] = $separator2;
-		$summaryTime = 0;
-		foreach ($group as $task => $seconds) {
-			$rounded = $this->getCalculator()->getHourUnit($seconds);
-			$summaryTime += $this->fixStringToFloat($rounded);
-			$data[] = $this->fixTasksLength($task) . $this->tabs(1) . $rounded;
-		}
-		$data[] = $separator2;
-		$data[] = '';
-		$data[] = '';
-		$data[] = $separator2;
-		$data[] = $this->fixTasksLength('Summary break') . $this->tabs(1) . $this->getCalculator()->getHourUnit($summaryBreak);
-		$data[] = $separator2;
-		$data[] = $this->fixTasksLength('Summary worked') . $this->tabs(1) . $this->fixFloatToString($summaryTime);
+
+		$this->appendLinesToData($data, $tmpLines);
+
 		$data[] = $separator2;
 
 		return implode(PHP_EOL, $data);
+	}
+
+	/**
+	 * @param $data
+	 * @param array $lines
+	 */
+	private function appendLinesToData(&$data, array $lines) {
+		foreach ($lines as $line) {
+			$data[] = $line;
+		}
 	}
 
 	/**
@@ -148,7 +159,15 @@ class Command_Show extends Command_Abstract {
 	 * @return string
 	 */
 	protected function fixTasksLength($task) {
-		return str_pad($task, Command_Abstract::TASK_LENGTH_NAME, ' ');
+		$length = Command_Abstract::TASK_LENGTH_NAME;
+
+		// fix console length on these special character
+		$specialWordsCount = preg_match_all('~(ö|ä|ü)~i', $task, $matches);
+		if ($specialWordsCount > 0) {
+			$length += $specialWordsCount;
+		}
+
+		return str_pad($task, $length, ' ');
 	}
 
 	/**

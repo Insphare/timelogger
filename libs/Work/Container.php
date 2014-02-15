@@ -3,12 +3,10 @@
 /**
  * Class Work_Container
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Work_Container extends Work_Etter {
-
-
 
 	public function __construct() {
 		$this->isNew = true;
@@ -21,7 +19,6 @@ class Work_Container extends Work_Etter {
 		$this->calculate();
 		return $this->duration;
 	}
-
 
 	/**
 	 * @param int $stopped
@@ -42,7 +39,6 @@ class Work_Container extends Work_Etter {
 
 		$this->duration = (int)$duration;
 	}
-
 
 	/**
 	 *
@@ -89,8 +85,6 @@ class Work_Container extends Work_Etter {
 		return $workTime;
 	}
 
-
-
 	/**
 	 * @return int
 	 */
@@ -132,5 +126,4 @@ class Work_Container extends Work_Etter {
 
 		$this->lastBreakTimeBegin = null;
 	}
-
 }

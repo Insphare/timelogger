@@ -23,12 +23,15 @@ class Command_Start extends Command_Abstract {
 		$output = array();
 		$workName = $this->getArgument(1);
 		$this->assertArguments();
+		$resumeContent = '';
 
 		$workObject = $this->getWorkObjectFromCacheData();
 		if (null !== $workObject) {
 			$output[] = $this->callForeignCommand('Stop', $this->arguments);
-			$this->saveCacheData($workObject->getLabel(), 'Resume');
+			$resumeContent = $workObject->getLabel();
 		}
+
+		$this->saveCacheData($resumeContent, 'Resume');
 
 		$workObject = $this->getWorkContainerByName($workName);
 		$workObject->startWorkTime();
@@ -36,7 +39,7 @@ class Command_Start extends Command_Abstract {
 		$this->saveCacheData($workObject);
 
 		$this->getFileManager()->lockActionsForCommands($this->lockStart);
-		$output[] = 'Work on \'' . $workName . '\' started';
+		$output[] = 'Work on \'' . $workName . '\' started.';
 
 		return implode(PHP_EOL, $output);
 	}

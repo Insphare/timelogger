@@ -3,8 +3,8 @@
 /**
  * Class Work_Etter
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 abstract class Work_Etter {
 
@@ -50,7 +50,7 @@ abstract class Work_Etter {
 
 	protected $isNew = false;
 
-		/**
+	/**
 	 * @param array $breakTime
 	 */
 	public function setBreakTime($breakTime) {
@@ -63,7 +63,6 @@ abstract class Work_Etter {
 	public function setLastBreakTimeBegin($lastBreakTimeBegin) {
 		$this->lastBreakTimeBegin = $lastBreakTimeBegin;
 	}
-
 
 	/**
 	 * @param string $label
@@ -97,7 +96,6 @@ abstract class Work_Etter {
 		return $this->started;
 	}
 
-
 	/**
 	 * @return int
 	 */
@@ -105,39 +103,31 @@ abstract class Work_Etter {
 		return $this->stopped;
 	}
 
-
-
 	/**
 	 * @param int $duration
 	 */
-	public function setDuration( $duration ) {
+	public function setDuration($duration) {
 		$this->duration = $duration;
 	}
-
-
 
 	/**
 	 * @param int $lastWorkTimeBegin
 	 */
-	public function setLastWorkTimeBegin( $lastWorkTimeBegin ) {
+	public function setLastWorkTimeBegin($lastWorkTimeBegin) {
 		$this->lastWorkTimeBegin = $lastWorkTimeBegin;
 	}
-
-
 
 	/**
 	 * @param int $stopped
 	 */
-	public function setStopped( $stopped ) {
+	public function setStopped($stopped) {
 		$this->stopped = $stopped;
 	}
-
-
 
 	/**
 	 * @param array $workTime
 	 */
-	public function setWorkTime( $workTime ) {
+	public function setWorkTime($workTime) {
 		$this->workTime = $workTime;
 	}
 
@@ -156,14 +146,12 @@ abstract class Work_Etter {
 		return $this->lastWorkTimeBegin;
 	}
 
-
-		/**
+	/**
 	 * @return array
 	 */
 	protected function getProperties() {
 		return get_object_vars($this);
 	}
-
 
 	/**
 	 * @return array
@@ -177,8 +165,6 @@ abstract class Work_Etter {
 		return $data;
 	}
 
-
-
 	/**
 	 * @return boolean
 	 */
@@ -186,14 +172,10 @@ abstract class Work_Etter {
 		return $this->isNew;
 	}
 
-
-
 	/**
 	 * @param boolean $isNew
 	 */
-	public function setIsNew( $isNew ) {
+	public function setIsNew($isNew) {
 		$this->isNew = (bool)$isNew;
 	}
-
-
 }

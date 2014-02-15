@@ -30,6 +30,6 @@ class Command_Change extends Command_Stop {
 			$this->saveCacheData($workObjectFromFile, 'Start');
 		}
 
-		return 'Change name from \'' . $workNameOld . '\' to \'' . $workNameNew . '\'';
+		return 'Change name from \'' . $workNameOld . '\' to \'' . $workNameNew . '\'.';
 	}
 }
