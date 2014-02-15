@@ -233,7 +233,7 @@ class TimeLogger {
 			'export		- Export all to text files',
 			'append		- Append time to work',
 			'help		- Show help.',
-			'exit		- Exit',
+			'Quit		- Quit',
 		);
 
 		$this->printLine(implode(PHP_EOL, $text));
@@ -303,7 +303,7 @@ class TimeLogger {
 	 */
 	private function executeCommandCallback($commandName) {
 		switch ($commandName) {
-			case 'exit':
+			case 'quit':
 				$this->printByeBye();
 				exit(1);
 				break;
