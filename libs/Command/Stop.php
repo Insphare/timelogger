@@ -3,8 +3,8 @@
 /**
  * Class Command_Stop
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Stop extends Command_Abstract {
 
@@ -45,6 +45,4 @@ class Command_Stop extends Command_Abstract {
 			$this->throwError('Currently, no log is active.');
 		}
 	}
-
-
 }

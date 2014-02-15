@@ -3,8 +3,8 @@
 /**
  * Class Command_Resume
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Resume extends Command_Abstract {
 
@@ -19,9 +19,7 @@ class Command_Resume extends Command_Abstract {
 			throw new Command_Exception('No work available to resume.');
 		}
 
-		$startCommand = new Command_Start(array($cacheDataWorkName));
-		$output = $startCommand->execute();
+		$output = $this->callForeignCommand('Start', array($cacheDataWorkName));
 		return $output;
 	}
-
 }

@@ -5,8 +5,8 @@
  *
  * Class Command_Edit  || FIx?
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Edit extends Command_Show {
 
@@ -30,9 +30,8 @@ class Command_Edit extends Command_Show {
 		);
 
 		if (!isset($validAction[$action])) {
-			throw new Command_Exception('Invalid edit action: \''.$action.\'');
+			throw new Command_Exception('Invalid edit action: \'' . $action . \'');
 		}
-
 	}
 
 	private function getWork($work) {

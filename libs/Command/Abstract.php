@@ -154,6 +154,10 @@ abstract class Command_Abstract {
 		return $this->calculator;
 	}
 
+	/**
+	 * @param $workName
+	 * @return null|Work_Container|Work_LoadByData
+	 */
 	protected function getWorkContainerByName($workName) {
 		$this->checkLength('Task name', $workName, Command_Abstract::TASK_LENGTH_NAME);
 
@@ -180,6 +184,18 @@ abstract class Command_Abstract {
 		/** @var Work_Container $workObjectOrNull */
 		$workObjectOrNull = $this->loadCacheData('Start');
 		return $workObjectOrNull;
+	}
+
+	/**
+	 * @param $name
+	 * @param array $arguments
+	 * @return string
+	 */
+	protected function callForeignCommand($name, array $arguments) {
+		$className = 'Command_'.ucfirst($name);
+		/** @var Command_Abstract $stopCommand */
+		$stopCommand = new $className($arguments);
+		return $stopCommand->execute();
 	}
 
 	/**

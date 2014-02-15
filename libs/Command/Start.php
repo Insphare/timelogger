@@ -3,8 +3,8 @@
 /**
  * Class Command_Start
  *
- *  @author Manuel Will <insphare@gmail.com>
- *  @copyright Copyright (c) 2014, Manuel Will
+ * @author Manuel Will <insphare@gmail.com>
+ * @copyright Copyright (c) 2014, Manuel Will
  */
 class Command_Start extends Command_Abstract {
 
@@ -26,8 +26,7 @@ class Command_Start extends Command_Abstract {
 
 		$workObject = $this->getWorkObjectFromCacheData();
 		if (null !== $workObject) {
-			$stopCommand = new Command_Stop($this->arguments);
-			$output[] = $stopCommand->execute();
+			$output[] = $this->callForeignCommand('Stop', $this->arguments);
 			$this->saveCacheData($workObject->getLabel(), 'Resume');
 		}
 
@@ -41,5 +40,4 @@ class Command_Start extends Command_Abstract {
 
 		return implode(PHP_EOL, $output);
 	}
-
 }
