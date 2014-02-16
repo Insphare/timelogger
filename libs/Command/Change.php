@@ -9,6 +9,14 @@
 class Command_Change extends Command_Stop {
 
 	/**
+	 * @param array $arguments
+	 */
+	public function __construct(array $arguments) {
+		$this->summaryArgumentsToOne();
+		parent::__construct($arguments);
+	}
+
+	/**
 	 * @return string
 	 */
 	public function execute() {
