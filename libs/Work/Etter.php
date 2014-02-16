@@ -53,6 +53,9 @@ abstract class Work_Etter {
 	 */
 	protected $isNew = false;
 
+	/**
+	 * @var bool
+	 */
 	protected $markedAsActive = false;
 
 	/**

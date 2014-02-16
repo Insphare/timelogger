@@ -272,7 +272,7 @@ class TimeLogger {
 			}
 
 			$this->isEmptyCommand = false;
-			$line = explode(' ', $line);
+			$line = $this->parseArguments($line);
 			$commandName = strtolower($line[0]);
 			$commandClass = 'Command_' . ucfirst($commandName);
 			unset($line[0]);
@@ -296,6 +296,21 @@ class TimeLogger {
 		catch (Command_Exception $e) {
 			$this->showHelp($e->getMessage());
 		}
+	}
+
+	/**
+	 * @param $string
+	 * @return array
+	 */
+	private function parseArguments($string) {
+		$arguments = array();
+		$regEx = '~("|\'|)(?<argument>[\w [:punct:]]+)(\1)( |$)~iU';
+		preg_match_all($regEx, $string, $arrMatches, PREG_SET_ORDER);
+		foreach ($arrMatches as $arrMatch) {
+			$arguments[] = $arrMatch['argument'];
+		}
+
+		return $arguments;
 	}
 
 	/**

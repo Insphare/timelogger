@@ -31,6 +31,11 @@ class Command_Append extends Command_Abstract {
 		return $message;
 	}
 
+	/**
+	 * @param $workObject
+	 * @return null|Work_LoadByData
+	 * @throws Command_Exception
+	 */
 	protected function getWork($workObject) {
 		$exceptionMessage = 'Work not found for current day.';
 		$workObject = $this->getFileManager()->getWorkContainerByWorkName($workObject);
@@ -41,6 +46,12 @@ class Command_Append extends Command_Abstract {
 		return $workObject;
 	}
 
+	/**
+	 * @param $string
+	 * @param bool $canNegative
+	 * @return float|int|mixed
+	 * @throws Command_Exception
+	 */
 	protected function getHourInSeconds($string, $canNegative = true) {
 		if ($string === 'now' && true === $canNegative) {
 			return 0;
@@ -68,6 +79,12 @@ class Command_Append extends Command_Abstract {
 		return $hour;
 	}
 
+	/**
+	 * @param $workName
+	 * @param $startTime
+	 * @param $duration
+	 * @return string
+	 */
 	private function handleAction($workName, $startTime, $duration) {
 		$workObject = $this->getWork($workName);
 

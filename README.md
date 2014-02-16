@@ -31,5 +31,4 @@ OR
 
 @suggestions:
 - bootstrap check fur extension pcntl.
-- Resume (start new work on last work name)
-- Edit (Edit a task of the day by argument: 0->file|timestamp_begin)	1->intSecond (+|-))
+- rename work
