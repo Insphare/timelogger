@@ -1,0 +1,36 @@
+<phpunit backupGlobals="false"
+		 backupStaticAttributes="false"
+		 bootstrap="bootstrap.php"
+		 colors="true"
+		 convertErrorsToExceptions="true"
+		 convertNoticesToExceptions="true"
+		 convertWarningsToExceptions="true"
+		 processIsolation="false"
+		 stopOnFailure="false"
+		 syntaxCheck="false"
+		 testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
+	<php>
+		<const name="TIMELOGGER_TESTS" value="true"/>
+	</php>
+	<groups>
+		<exclude>
+			<group>slow</group>
+		</exclude>
+	</groups>
+	<testsuites>
+		<testsuite name="UnitTests">
+			<directory>unit</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">../libs</directory>
+			<exclude>
+				<directory suffix=".php">../task</directory>
+				<directory suffix=".php">../taskBackup</directory>
+				<directory suffix=".php">../report</directory>
+				<directory suffix=".php">../images</directory>
+			</exclude>
+		</whitelist>
+	</filter>
+</phpunit>
