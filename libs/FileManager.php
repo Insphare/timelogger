@@ -55,7 +55,7 @@ class FileManager {
 	 * @param $imageFile
 	 * @return string
 	 */
-	public function getImage($imageFile) {
+	public function getFullImagePath($imageFile) {
 		return $this->dirImage . $imageFile;
 	}
 

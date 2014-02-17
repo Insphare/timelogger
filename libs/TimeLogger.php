@@ -194,7 +194,7 @@ class TimeLogger {
 	 * @param $imageFile
 	 */
 	private function printImage($imageFile) {
-		$file = $this->getFileManager()->getImage($imageFile);
+		$file = $this->getFileManager()->getFullImagePath($imageFile);
 		$file = file_get_contents($file);
 		$file = explode(PHP_EOL, $file);
 		foreach ($file as $line) {
