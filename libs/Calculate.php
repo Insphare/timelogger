@@ -9,6 +9,20 @@
 class Calculate {
 
 	/**
+	 * Length
+	 */
+	const PAD_LENGTH = 13;
+
+	/**
+	 * Fill character
+	 */
+	const FILL_CHARACTER = ' ';
+	/**
+	 *
+	 */
+	const PAD_LENGTH_GAP = 4;
+
+	/**
 	 * @param $intSeconds
 	 * @return string
 	 */
@@ -24,10 +38,15 @@ class Calculate {
 		$round = false;
 		$plusH = false;
 		$plusM = 0;
-
 		$tolerance = 10;
 
 		switch (true) {
+			case $check <= 10:
+				$round = true;
+				$plusH = false;
+				$plusM = 00;
+				break;
+
 			case $check <= 25 + $tolerance:
 				$round = true;
 				$plusH = false;
@@ -59,6 +78,10 @@ class Calculate {
 				$hour++;
 			}
 
+			if ($plusM == 0) {
+				$plusM = '00';
+			}
+
 			$hourUnit = $hour . ',' . $plusM;
 		}
 
@@ -72,7 +95,7 @@ class Calculate {
 	 * @param string $fillCharacter
 	 * @return string
 	 */
-	private function padString($string, $length, $fillCharacter = ' ') {
+	private function padString($string, $length, $fillCharacter = self::FILL_CHARACTER) {
 		return str_pad($string, $length, $fillCharacter, STR_PAD_LEFT);
 	}
 
@@ -98,21 +121,21 @@ class Calculate {
 		$diffSeconds = $diffSeconds % 3600;
 
 		$minutes = floor($diffSeconds / 60);
-		$minutes = $this->padString($minutes, 2);
+		$minutes = $this->padString($minutes, self::PAD_LENGTH_GAP);
 
 		$diffSeconds = $diffSeconds % 60;
-		$diffSeconds = $this->padString($diffSeconds, 2);
+		$diffSeconds = $this->padString($diffSeconds, self::PAD_LENGTH_GAP);
 
 		if ($hours > 0) {
-			$return = sprintf('%sh  %sm  %ss', $hours, $minutes, $diffSeconds);
+			$return = sprintf('%sh%sm%ss', $hours, $minutes, $diffSeconds);
 		}
 		elseif ((int)$hours <= 0 && (int)$minutes <= 0) {
 			$return = sprintf('%ss', $diffSeconds);
 		}
 		else {
-			$return = sprintf('%sm  %ss', $minutes, $diffSeconds);
+			$return = sprintf('%sm%ss', $minutes, $diffSeconds);
 		}
 
-		return $this->padString($return, 13);
+		return $this->padString($return, self::PAD_LENGTH);
 	}
 }

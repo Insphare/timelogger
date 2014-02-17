@@ -184,7 +184,7 @@ abstract class Command_Abstract {
 			$this->throwError('Please enter a task name.');
 		}
 
-		$workContainer = $this->getFileManager()->getWorkContainerByWorkName($workName);
+		$workContainer = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workName);
 
 		if (empty($workContainer)) {
 			$workContainer = new Work_Container();

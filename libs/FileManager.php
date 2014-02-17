@@ -203,11 +203,17 @@ class FileManager {
 
 	/**
 	 * @param Work_Container $workContainerObject
+	 * @throws Command_Exception
 	 */
 	public function storeWork(Work_Container $workContainerObject) {
 		$startTimeStamp = $workContainerObject->getStarted();
 		$startTimeStamp = date('Y-m-d 00:00:00', $startTimeStamp);
 		$startTimeStamp = strtotime($startTimeStamp);
+
+		$workName = $workContainerObject->getLabel();
+		if (empty($workName)) {
+			throw new Command_Exception('Missing work name!');
+		}
 
 		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workContainerObject->getLabel());
 		$fileData = $workContainerObject->getAsArray();
@@ -218,7 +224,7 @@ class FileManager {
 	 * @param $workName
 	 * @return null|Work_LoadByData
 	 */
-	public function getWorkContainerByWorkName($workName) {
+	public function getWorkContainerByWorkNameFromToday($workName) {
 		$startTimeStamp = date('Y-m-d 00:00:00', time());
 		$startTimeStamp = strtotime($startTimeStamp);
 		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workName);
@@ -258,5 +264,40 @@ class FileManager {
 	 */
 	public function getDirTasks() {
 		return $this->dirTasks;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getDirCache() {
+		return $this->dirCache;
+	}
+
+	/**
+	 * @return null
+	 */
+	public function getDirImage() {
+		return $this->dirImage;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getDirReports() {
+		return $this->dirReports;
+	}
+
+	/**
+	 * @return \FileManager
+	 */
+	public static function getInstance() {
+		return self::$instance;
+	}
+
+	/**
+	 * @return null|string
+	 */
+	public function getLockedForCommands() {
+		return $this->lockedForCommands;
 	}
 }

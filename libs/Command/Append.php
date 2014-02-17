@@ -38,7 +38,7 @@ class Command_Append extends Command_Abstract {
 	 */
 	protected function getWork($workObject) {
 		$exceptionMessage = 'Work not found for current day.';
-		$workObject = $this->getFileManager()->getWorkContainerByWorkName($workObject);
+		$workObject = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workObject);
 		if (empty($workObject)) {
 			throw new Command_Exception($exceptionMessage);
 		}
