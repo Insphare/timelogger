@@ -34,6 +34,7 @@ abstract class Command_Abstract {
 		'info',
 		'pause',
 		'show',
+		'note',
 	);
 
 	/**

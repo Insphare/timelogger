@@ -18,7 +18,7 @@ class Command_Export extends Command_Show {
 		$x = 0;
 		foreach ($dates as $date) {
 			$x++;
-			$report = $this->getDay(strtotime($date));
+			$report = $this->getDay(strtotime($date), true);
 			$this->getFileManager()->saveReport($date, $report);
 		}
 

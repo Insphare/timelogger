@@ -266,7 +266,7 @@ class Command_Show extends Command_Abstract {
 	 * @param $timestamp
 	 * @return string
 	 */
-	protected function getDay($timestamp) {
+	protected function getDay($timestamp, $showNotes = false) {
 		$workObjects = $this->getWorkedObjects($timestamp);
 
 		if (empty($workObjects)) {
@@ -397,6 +397,37 @@ class Command_Show extends Command_Abstract {
 		$this->appendToOutput($tmpLines);
 		$this->appendToOutput($this->getSeparatorLineTwo());
 
+		if (true === $showNotes) {
+			$this->appendNotes($workObjects);
+		}
+
 		return implode(PHP_EOL, $this->finallyOutput);
+	}
+
+
+
+	/**
+	 */
+	private function appendNotes($workObjects) {
+
+		$this->appendToOutput('');
+		$this->appendToOutput('');
+		$this->appendToOutput('');
+		$this->appendToOutput(str_pad('', 30, '='));
+		$this->appendToOutput(':: Notes ::');
+		$this->appendToOutput(str_pad('', 30, '='));
+		$this->appendToOutput('');
+
+		/**
+		 * @var $workObject Work_Container
+		 */
+		foreach ($workObjects as $workObject) {
+			$this->appendToOutput('[Notes for work: ' . $workObject->getLabel() . ']');
+			foreach ($workObject->getNotes() as $note) {
+				$this->appendToOutput('- ' . $note);
+			}
+			$this->appendToOutput('');
+			$this->appendToOutput('');
+		}
 	}
 }

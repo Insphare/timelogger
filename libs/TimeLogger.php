@@ -230,10 +230,11 @@ class TimeLogger {
 			'continue	- Continue the work',
 			'resume		- Resume previous work',
 			'show		- Show tasks',
+			'note		- add a note to work',
 			'export		- Export all to text files',
 			'append		- Append time to work',
 			'help		- Show help.',
-			'Quit		- Quit',
+			'quit		- Quit',
 		);
 
 		$this->printLine(implode(PHP_EOL, $text));

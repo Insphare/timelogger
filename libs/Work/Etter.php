@@ -59,6 +59,11 @@ abstract class Work_Etter {
 	protected $markedAsActive = false;
 
 	/**
+	 * @var array
+	 */
+	protected $notes = array();
+
+	/**
 	 * @param boolean $markColored
 	 */
 	public function setMarkedAsActive($markColored) {
@@ -205,5 +210,26 @@ abstract class Work_Etter {
 	 */
 	public function setIsNew($isNew) {
 		$this->isNew = (bool)$isNew;
+	}
+
+	/**
+	 * @param array $notes
+	 */
+	public function setNotes( $notes ) {
+		$this->notes = $notes;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getNotes() {
+		return $this->notes;
+	}
+
+	/**
+	 * @param string $text
+	 */
+	public function addNote($text) {
+		$this->notes[] = $text;
 	}
 }
