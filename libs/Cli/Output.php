@@ -79,7 +79,7 @@ class Cli_Output {
 		$outputString = '';
 		$haveColor = false;
 
-		if (!empty($foregroundColor) || !empty($foregroundColor)) {
+		if (!empty($foregroundColor) || !empty($backgroundColor)) {
 			$haveColor = true;
 		}
 
