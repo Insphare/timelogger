@@ -401,7 +401,9 @@ class Command_Show extends Command_Abstract {
 			$this->appendNotes($workObjects);
 		}
 
-		return implode(PHP_EOL, $this->finallyOutput);
+		$output = implode(PHP_EOL, $this->finallyOutput);
+		$this->finallyOutput = array();
+		return $output;
 	}
 
 
