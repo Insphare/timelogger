@@ -68,23 +68,53 @@ class Command_Append extends Command_Abstract {
 	 * @param $workName
 	 * @param $startTime
 	 * @param $duration
+	 * @throws Command_Exception
 	 * @return string
 	 */
 	private function handleAction($workName, $startTime, $duration) {
 		$workObject = $this->getStoredWorkObjectByNameOfTheDay($workName);
 
-		$output = array();
-		$output[] = $this->getDurationLine($workObject);
-		$output[] = 'Append time to work: ' . $workName;
-		$output[] = 'Start time: ' . $startTime;
-		$output[] = 'Duration: ' . $duration;
+		$oldDurationString = $this->getDurationLine($workObject);
 
 		$fromSec = time() - $this->getHourInSeconds($startTime);
 		$duration = $this->getHourInSeconds($duration, false);
 		$workObject->appendManualWorkTime($fromSec, $duration);
-		$output[] = $this->getDurationLine($workObject);
+		$newDurationString = $this->getDurationLine($workObject);
 
 		$this->getFileManager()->storeWork($workObject);
-		return implode(PHP_EOL, $output);
+
+		$confirmMessage = 'Would you really append this time to work: \'' . $workName . '\' with following changes:' . PHP_EOL;
+		$this->getCliOutput()->createLine($confirmMessage, true, Cli_Output::COLOR_LIGHT_RED);
+		$this->getCliOutput()->createLine('Append time to work: ' . $workName, true);
+		$this->getCliOutput()->createLine('Start time: ' . $startTime, true);
+		$this->getCliOutput()->createLine('Duration: ' . $duration, true);
+		$this->getCliOutput()->createLine('----', true);
+		$this->getCliOutput()->createLine('Old duration time. ' . $oldDurationString, true);
+		$this->getCliOutput()->createLine('New duration time. ' . $newDurationString, true);
+		$this->getCliOutput()->createLine('', true);
+		$this->getCliOutput()->createLine('[y/n]', true);
+		$this->getCliOutput()->flush();
+
+		while (true) {
+			$line = $this->getCliPrompt()->promptToUserInput();
+			$line = trim(strtolower($line));
+
+			switch ($line) {
+				case 'n':
+					throw new Command_Exception('You have canceled appending works.');
+
+				case 'y':
+					$this->getFileManager()->storeWork($workObject);
+
+					break 2;
+
+				default:
+					break;
+			}
+
+			$this->getCliOutput()->createLine('Please answer with [y/n]', Cli_Output::COLOR_LIGHT_RED)->flush();
+		}
+
+		return 'Appended time to work:  \'' . $workName . '\'';
 	}
 }

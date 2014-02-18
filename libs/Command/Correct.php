@@ -38,6 +38,6 @@ class Command_Correct extends Command_Stop {
 			$this->saveCacheData($workObjectFromFile, 'Start');
 		}
 
-		return 'Change name from \'' . $workNameOld . '\' to \'' . $workNameNew . '\'.';
+		return 'Correct name from \'' . $workNameOld . '\' to \'' . $workNameNew . '\'.';
 	}
 }

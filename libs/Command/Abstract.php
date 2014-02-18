@@ -40,7 +40,7 @@ abstract class Command_Abstract {
 		'start',
 		'resume',
 		'stop',
-		'change',
+		'correct',
 		'info',
 		'pause',
 		'show',
