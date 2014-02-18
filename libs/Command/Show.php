@@ -411,7 +411,6 @@ class Command_Show extends Command_Abstract {
 	/**
 	 */
 	private function appendNotes($workObjects) {
-
 		$this->appendToOutput('');
 		$this->appendToOutput('');
 		$this->appendToOutput('');
@@ -420,16 +419,28 @@ class Command_Show extends Command_Abstract {
 		$this->appendToOutput(str_pad('', 30, '='));
 		$this->appendToOutput('');
 
+		$hasNotes = false;
+
 		/**
 		 * @var $workObject Work_Container
 		 */
 		foreach ($workObjects as $workObject) {
+			$arrNotes = $workObject->getNotes();
+			if (empty($arrNotes)) {
+				continue;
+			}
+
+			$hasNotes = true;
 			$this->appendToOutput('[Notes for work: ' . $workObject->getLabel() . ']');
-			foreach ($workObject->getNotes() as $note) {
+			foreach ($arrNotes as $note) {
 				$this->appendToOutput('- ' . $note);
 			}
 			$this->appendToOutput('');
 			$this->appendToOutput('');
+		}
+
+		if (false === $hasNotes) {
+			$this->appendToOutput('- No notes available, yet.');
 		}
 	}
 }
