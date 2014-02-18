@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Class Command_Change
+ * Class Command_Correct
  *
  * @author Manuel Will <insphare@gmail.com>
  * @copyright Copyright (c) 2014, Manuel Will
  */
-class Command_Change extends Command_Stop {
+class Command_Correct extends Command_Stop {
 
 	/**
 	 * @param array $arguments
