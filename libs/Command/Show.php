@@ -406,8 +406,6 @@ class Command_Show extends Command_Abstract {
 		return $output;
 	}
 
-
-
 	/**
 	 */
 	private function appendNotes($workObjects) {

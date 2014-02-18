@@ -16,6 +16,9 @@ class Cli_Prompt {
 	 */
 	private static $breakSignal = false;
 
+	/**
+	 *
+	 */
 	public function __construct() {
 		// Prevent breaking out of the console.
 		$this->registerHandler();
@@ -23,10 +26,16 @@ class Cli_Prompt {
 		self::setBreakSignal(false);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function getBreakSignal() {
 		return self::$breakSignal;
 	}
 
+	/**
+	 * @param $state
+	 */
 	public static function setBreakSignal($state) {
 		self::$breakSignal = (bool)$state;
 	}
@@ -45,7 +54,7 @@ class Cli_Prompt {
 		));
 	}
 
-		/**
+	/**
 	 * @param $signal
 	 */
 	protected function signalHandler($signal) {
@@ -67,5 +76,4 @@ class Cli_Prompt {
 		$line = fgets($handle);
 		return trim($line);
 	}
-
 }

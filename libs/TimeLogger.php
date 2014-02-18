@@ -70,7 +70,6 @@ class TimeLogger {
 		return trim($line);
 	}
 
-
 	/**
 	 * @author Manuel Will
 	 * @since 2013

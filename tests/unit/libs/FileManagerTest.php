@@ -136,7 +136,7 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 		$fileManager = $this->getFileManager();
 		$workContainer = new Work_Container();
 		$workContainer->startWorkTime();
-		$workContainer->setLastWorkTimeBegin(time()+50);
+		$workContainer->setLastWorkTimeBegin(time() + 50);
 		$fileManager->storeWork($workContainer);
 	}
 
@@ -150,13 +150,13 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 		$workContainer->setLabel($workName);
 		$workContainer->setStarted(1392591600);
 		$workContainer->setLastWorkTimeBegin(1392591600);
-		$workContainer->setLastWorkTimeBegin(1392591600+50);
+		$workContainer->setLastWorkTimeBegin(1392591600 + 50);
 		$fileManager->storeWork($workContainer);
 		unset($workContainer);
 
 		$workContainer = $fileManager->getWorkContainerByWorkNameFromToday($workName);
 		$this->assertSame($workName, $workContainer->getLabel());
-		$file = PHPUNIT_TEST_DIR_FIXTURES.'task'.DIRECTORY_SEPARATOR.'1392591600_phpunittest.dat';
+		$file = PHPUNIT_TEST_DIR_FIXTURES . 'task' . DIRECTORY_SEPARATOR . '1392591600_phpunittest.dat';
 		$this->assertTrue(file_exists($file));
 		unlink($file);
 		$this->assertFalse(file_exists($file));
@@ -167,7 +167,7 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 	 *
 	 */
 	public function testSaveReport() {
-		$reportFile = PHPUNIT_TEST_DIR_FIXTURES.'report'.DIRECTORY_SEPARATOR.'report.txt';
+		$reportFile = PHPUNIT_TEST_DIR_FIXTURES . 'report' . DIRECTORY_SEPARATOR . 'report.txt';
 		$fileContent = 'testReport';
 		$fileManager = $this->getFileManager();
 		$fileManager->saveReport('report', $fileContent);
@@ -182,7 +182,7 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 	 *
 	 */
 	public function testGetImage() {
-		$filePath = PHPUNIT_TEST_DIR_FIXTURES.'images'.DIRECTORY_SEPARATOR.'testimage.dat';
+		$filePath = PHPUNIT_TEST_DIR_FIXTURES . 'images' . DIRECTORY_SEPARATOR . 'testimage.dat';
 		$fileManager = $this->getFileManager();
 		$content = file_get_contents($fileManager->getFullImagePath('testimage.dat'));
 		$fileContent = file_get_contents($filePath);

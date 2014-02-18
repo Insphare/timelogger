@@ -10,5 +10,4 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 	public function testGetFallback() {
 		$this->assertEquals(null, Config::get('testkey2'));
 	}
-
 }

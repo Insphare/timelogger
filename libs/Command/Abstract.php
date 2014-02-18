@@ -250,7 +250,7 @@ abstract class Command_Abstract {
 	 * @throws Command_Exception
 	 */
 	protected function getStoredWorkObjectByNameOfTheDay($workName) {
-		$exceptionMessage = 'Work \''.$workName.'\' not found for current day.';
+		$exceptionMessage = 'Work \'' . $workName . '\' not found for current day.';
 		$workObject = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workName);
 
 		if (empty($workObject)) {

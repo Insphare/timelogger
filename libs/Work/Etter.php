@@ -215,7 +215,7 @@ abstract class Work_Etter {
 	/**
 	 * @param array $notes
 	 */
-	public function setNotes( $notes ) {
+	public function setNotes($notes) {
 		$this->notes = $notes;
 	}
 

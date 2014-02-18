@@ -67,8 +67,6 @@ class Cli_Output {
 		self::COLOR_LIGHT_GRAY => '47',
 	);
 
-
-
 	/**
 	 * @param $text
 	 * @param bool $newLine

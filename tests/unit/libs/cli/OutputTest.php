@@ -55,7 +55,6 @@ class Cli_OutputTest extends PHPUnit_Framework_TestCase {
 		}
 
 		return $tests;
-
 	}
 
 	/**
@@ -93,7 +92,6 @@ class Cli_OutputTest extends PHPUnit_Framework_TestCase {
 		}
 
 		return $tests;
-
 	}
 
 	/**
@@ -111,5 +109,4 @@ class Cli_OutputTest extends PHPUnit_Framework_TestCase {
 		$cliOutput = new Cli_Output();
 		$cliOutput->createLine('testLine', false, null, 'asd');
 	}
-
 }

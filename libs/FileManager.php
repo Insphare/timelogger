@@ -220,6 +220,10 @@ class FileManager {
 		$this->saveFile($fileName, $fileData);
 	}
 
+	/**
+	 * @param Work_Container $workContainerObject
+	 * @throws Command_Exception
+	 */
 	public function removeWork(Work_Container $workContainerObject) {
 		$startTimeStamp = $workContainerObject->getStarted();
 		$startTimeStamp = date('Y-m-d 00:00:00', $startTimeStamp);

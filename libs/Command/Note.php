@@ -16,7 +16,6 @@ class Command_Note extends Command_Stop {
 		parent::__construct($arguments);
 	}
 
-
 	/**
 	 * @throws Command_Exception
 	 * @return string

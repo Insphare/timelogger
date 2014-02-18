@@ -44,24 +44,24 @@ class Command_Merge extends Command_Stop {
 
 		foreach ($workObjectFrom->getWorkTimeItems() as $arrItems) {
 			$start = $arrItems['start'];
-			$duration = (int)$arrItems['stop'] -(int)$start;
+			$duration = (int)$arrItems['stop'] - (int)$start;
 			$workObjectTo->appendManualWorkTime($start, $duration);
 		}
 
 		foreach ($workObjectFrom->getBreakTimeItems() as $arrItems) {
 			$start = $arrItems['start'];
-			$duration = (int)$arrItems['stop'] -(int)$start;
+			$duration = (int)$arrItems['stop'] - (int)$start;
 			$workObjectTo->appendManualBreakTime($start, $duration);
 		}
 
 		$message = sprintf('Merged from \'%s\' to \'%s\'. ', $workNameFrom, $workNameTo);
 		$workObjectTo->addNote($message);
 
-		$confirmMessage = 'Would you really merge the work: \''.$workNameFrom.'\' with following changes:' . PHP_EOL;
+		$confirmMessage = 'Would you really merge the work: \'' . $workNameFrom . '\' with following changes:' . PHP_EOL;
 		$this->getCliOutput()->createLine($confirmMessage, true, Cli_Output::COLOR_LIGHT_RED);
 		$this->getCliOutput()->createLine($message, true);
-		$this->getCliOutput()->createLine('Duration time \''.$workNameFrom.'\'. ' . $this->getDurationLine($workObjectFrom), true);
-		$this->getCliOutput()->createLine('Duration time \''.$workNameTo.'\'. ' . $workToDuration, true);
+		$this->getCliOutput()->createLine('Duration time \'' . $workNameFrom . '\'. ' . $this->getDurationLine($workObjectFrom), true);
+		$this->getCliOutput()->createLine('Duration time \'' . $workNameTo . '\'. ' . $workToDuration, true);
 		$this->getCliOutput()->createLine('----', true);
 		$this->getCliOutput()->createLine('Merged duration time. ' . $this->getDurationLine($workObjectTo), true);
 		$this->getCliOutput()->createLine('', true);
