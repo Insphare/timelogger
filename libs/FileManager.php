@@ -239,11 +239,18 @@ class FileManager {
 	}
 
 	/**
+	 * @return bool|string
+	 */
+	protected function getCurrentDate() {
+		return date('Y-m-d 00:00:00', time());
+	}
+
+	/**
 	 * @param $workName
 	 * @return null|Work_LoadByData
 	 */
 	public function getWorkContainerByWorkNameFromToday($workName) {
-		$startTimeStamp = date('Y-m-d 00:00:00', time());
+		$startTimeStamp = $this->getCurrentDate();
 		$startTimeStamp = strtotime($startTimeStamp);
 		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workName);
 		if (!file_exists($fileName)) {

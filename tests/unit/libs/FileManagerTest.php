@@ -3,7 +3,11 @@
 /**
  * Class FileManagerTEst
  */
-class FileManagerTEst extends PHPUnit_Framework_TestCase {
+class FileManagerTest extends PHPUnit_Framework_TestCase {
+	/**
+	 *
+	 */
+	const TIMESTAMP_UNIT = 1392591600;
 
 	/**
 	 * @return FileManager
@@ -11,7 +15,8 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 	private function getFileManager() {
 		$beforeConfig = Config::get(Config::BASE_PATH);
 		Config::set(Config::BASE_PATH, PHPUNIT_TEST_DIR_FIXTURES);
-		$fileManager = FileManager::get();
+		$fileManager = new FileManagerTestInherited();
+		FileManagerTestInherited::get();
 		Config::set(Config::BASE_PATH, $beforeConfig);
 
 		return $fileManager;
@@ -145,12 +150,13 @@ class FileManagerTEst extends PHPUnit_Framework_TestCase {
 	 */
 	public function testStoreWork() {
 		$workName = 'phpunit test';
+
 		$fileManager = $this->getFileManager();
 		$workContainer = new Work_Container();
 		$workContainer->setLabel($workName);
-		$workContainer->setStarted(1392591600);
-		$workContainer->setLastWorkTimeBegin(1392591600);
-		$workContainer->setLastWorkTimeBegin(1392591600 + 50);
+		$workContainer->setStarted(self::TIMESTAMP_UNIT);
+		$workContainer->setLastWorkTimeBegin(self::TIMESTAMP_UNIT);
+		$workContainer->setLastWorkTimeBegin(self::TIMESTAMP_UNIT + 50);
 		$fileManager->storeWork($workContainer);
 		unset($workContainer);
 
@@ -204,5 +210,25 @@ class TestMiniClass {
 	 */
 	public function get() {
 		return $this->test;
+	}
+}
+
+/**
+ * Class FileManagerTestInherited
+ */
+class FileManagerTestInherited extends FileManager {
+
+	/**
+	 *
+	 */
+	public function __construct() {
+		parent::__construct();
+	}
+
+	/**
+	 * @return bool|string
+	 */
+	protected function getCurrentDate() {
+		return date('Y-m-d 00:00:00', FileManagerTest::TIMESTAMP_UNIT);
 	}
 }
