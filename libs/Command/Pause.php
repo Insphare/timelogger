@@ -13,7 +13,7 @@ class Command_Pause extends Command_Stop {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertActiveLocking();
+		$this->assertActiveLogging();
 
 		$workObject = $this->getWorkObjectFromCacheData();
 		if (true === $workObject->hasActiveBreakTime()) {

@@ -32,21 +32,6 @@ class Command_Append extends Command_Abstract {
 	}
 
 	/**
-	 * @param $workObject
-	 * @return null|Work_LoadByData
-	 * @throws Command_Exception
-	 */
-	protected function getWork($workObject) {
-		$exceptionMessage = 'Work not found for current day.';
-		$workObject = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workObject);
-		if (empty($workObject)) {
-			throw new Command_Exception($exceptionMessage);
-		}
-
-		return $workObject;
-	}
-
-	/**
 	 * @param $string
 	 * @param bool $canNegative
 	 * @return float|int|mixed
@@ -86,7 +71,7 @@ class Command_Append extends Command_Abstract {
 	 * @return string
 	 */
 	private function handleAction($workName, $startTime, $duration) {
-		$workObject = $this->getWork($workName);
+		$workObject = $this->getStoredWorkObjectByNameOfTheDay($workName);
 
 		$output = array();
 		$output[] = $this->getDurationLine($workObject);

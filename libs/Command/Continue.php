@@ -13,7 +13,7 @@ class Command_Continue extends Command_Pause {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertActiveLocking();
+		$this->assertActiveLogging();
 
 		$workObject = $this->getWorkObjectFromCacheData();
 

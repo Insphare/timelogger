@@ -12,7 +12,7 @@ class Command_Info extends Command_Stop {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertActiveLocking();
+		$this->assertActiveLogging();
 
 		$workObject = $this->getWorkObjectFromCacheData();
 		$taskLabel = $workObject->getLabel();

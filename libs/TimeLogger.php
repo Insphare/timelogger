@@ -1,8 +1,5 @@
 <?php
 
-ignore_user_abort(true);
-declare(ticks = 1);
-
 /**
  * Class Logger
  *
@@ -42,6 +39,11 @@ class TimeLogger {
 	private $cliOutput;
 
 	/**
+	 * @var Cli_Prompt
+	 */
+	private $cliPrompt;
+
+	/**
 	 * @var bool
 	 */
 	private $preventHelp = false;
@@ -50,23 +52,8 @@ class TimeLogger {
 	 *
 	 */
 	public function __construct() {
-		// Prevent breaking out of the console.
-		$this->registHandler();
 		$this->cliOutput = new Cli_Output();
-	}
-
-	/**
-	 * Prevent breaking out of the console.
-	 */
-	private function registHandler() {
-		pcntl_signal(SIGINT, array(
-			$this,
-			'signalHandler'
-		));
-		pcntl_signal(SIGTSTP, array(
-			$this,
-			'signalHandler'
-		));
+		$this->cliPrompt = new Cli_Prompt();
 	}
 
 	/**
@@ -79,25 +66,10 @@ class TimeLogger {
 			$this->printLine('> ', false, Cli_Output::COLOR_LIGHT_BLUE);
 		}
 
-		stream_set_blocking(STDIN, true);
-
-		$handle = fopen('php://stdin', 'r');
-		$line = fgets($handle);
-
+		$line = $this->cliPrompt->promptToUserInput();
 		return trim($line);
 	}
 
-	/**
-	 * @param $signal
-	 */
-	protected function signalHandler($signal) {
-		switch ($signal) {
-			case SIGINT:
-			case SIGTSTP:
-				$this->breakSignal = true;
-				break;
-		}
-	}
 
 	/**
 	 * @author Manuel Will
@@ -110,6 +82,7 @@ class TimeLogger {
 			$userInput = $this->setAndGetPromptLine();
 			$this->executeCommand($userInput);
 
+			$this->breakSignal = Cli_Prompt::getBreakSignal();
 			if (true === $this->breakSignal) {
 				$this->confirmToExit();
 			}
@@ -227,10 +200,10 @@ class TimeLogger {
 			'change		- Change current work name',
 			'info		- Information about the current work',
 			'pause		- Pause the current work',
-			'continue	- Continue the work',
+			'continue	- Continue the current work',
+			'note		- add a note to current work',
 			'resume		- Resume previous work',
 			'show		- Show tasks',
-			'note		- add a note to work',
 			'export		- Export all to text files',
 			'append		- Append time to work',
 			'help		- Show help.',

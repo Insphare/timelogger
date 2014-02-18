@@ -220,6 +220,20 @@ class FileManager {
 		$this->saveFile($fileName, $fileData);
 	}
 
+	public function removeWork(Work_Container $workContainerObject) {
+		$startTimeStamp = $workContainerObject->getStarted();
+		$startTimeStamp = date('Y-m-d 00:00:00', $startTimeStamp);
+		$startTimeStamp = strtotime($startTimeStamp);
+
+		$workName = $workContainerObject->getLabel();
+		if (empty($workName)) {
+			throw new Command_Exception('Missing work name!');
+		}
+
+		$fileName = $this->getWorkFilePathByName($startTimeStamp, $workContainerObject->getLabel());
+		unlink($fileName);
+	}
+
 	/**
 	 * @param $workName
 	 * @return null|Work_LoadByData

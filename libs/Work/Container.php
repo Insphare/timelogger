@@ -84,6 +84,17 @@ class Work_Container extends Work_Etter {
 	}
 
 	/**
+	 * @param $start
+	 * @param $durationInSeconds
+	 */
+	public function appendManualBreakTime($start, $durationInSeconds) {
+		$this->breakTime[] = array(
+			'start' => $start,
+			'stop' => $start + $durationInSeconds,
+		);
+	}
+
+	/**
 	 * @return int
 	 */
 	public function getWorkTime() {

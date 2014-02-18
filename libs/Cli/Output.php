@@ -67,11 +67,15 @@ class Cli_Output {
 		self::COLOR_LIGHT_GRAY => '47',
 	);
 
+
+
 	/**
 	 * @param $text
 	 * @param bool $newLine
 	 * @param null $foregroundColor
 	 * @param null $backgroundColor
+	 *
+	 * @return $this
 	 */
 	public function createLine($text, $newLine = true, $foregroundColor = null, $backgroundColor = null) {
 		$foregroundColor = $this->validateForegroundColor($foregroundColor);
@@ -102,6 +106,8 @@ class Cli_Output {
 		}
 
 		$this->output[] = $outputString;
+
+		return $this;
 	}
 
 	/**
@@ -113,6 +119,8 @@ class Cli_Output {
 		}
 
 		$this->reset();
+
+		return $this;
 	}
 
 	/**

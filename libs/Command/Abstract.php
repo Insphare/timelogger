@@ -24,6 +24,16 @@ abstract class Command_Abstract {
 	protected $calculator;
 
 	/**
+	 * @var Cli_Prompt
+	 */
+	private $cliPrompt;
+
+	/**
+	 * @var Cli_Output
+	 */
+	private $cliOutput;
+
+	/**
 	 * @var array
 	 */
 	protected $lockStart = array(
@@ -62,6 +72,22 @@ abstract class Command_Abstract {
 
 		$this->arguments = $arguments;
 		$this->calculator = new Calculate();
+		$this->cliPrompt = new Cli_Prompt();
+		$this->cliOutput = new Cli_Output();
+	}
+
+	/**
+	 * @return \Cli_Output
+	 */
+	public function getCliOutput() {
+		return $this->cliOutput;
+	}
+
+	/**
+	 * @return \Cli_Prompt
+	 */
+	public function getCliPrompt() {
+		return $this->cliPrompt;
 	}
 
 	/**
@@ -216,6 +242,44 @@ abstract class Command_Abstract {
 		/** @var Command_Abstract $stopCommand */
 		$stopCommand = new $className($arguments);
 		return $stopCommand->execute();
+	}
+
+	/**
+	 * @param $workName
+	 * @return null|Work_LoadByData
+	 * @throws Command_Exception
+	 */
+	protected function getStoredWorkObjectByNameOfTheDay($workName) {
+		$exceptionMessage = 'Work \''.$workName.'\' not found for current day.';
+		$workObject = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workName);
+
+		if (empty($workObject)) {
+			throw new Command_Exception($exceptionMessage);
+		}
+
+		return $workObject;
+	}
+
+	/**
+	 *
+	 */
+	protected function assertActiveLogging() {
+		/** @var Work_Container $data */
+		$data = $this->loadCacheData('Start');
+		if (empty($data) || !$data instanceof Work_Container) {
+			$this->throwError('Currently, no log is active.');
+		}
+	}
+
+	/**
+	 *
+	 */
+	protected function assertInactiveLogging() {
+		/** @var Work_Container $data */
+		$data = $this->loadCacheData('Start');
+		if (!empty($data)) {
+			$this->throwError('Currently, a work log is active. You have to stopped the current work, first.');
+		}
 	}
 
 	/**

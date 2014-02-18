@@ -22,7 +22,7 @@ class Command_Note extends Command_Stop {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertActiveLocking();
+		$this->assertActiveLogging();
 		$note = $this->getArgument(1);
 
 		if (empty($note)) {

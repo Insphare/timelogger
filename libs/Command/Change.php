@@ -20,7 +20,7 @@ class Command_Change extends Command_Stop {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertActiveLocking();
+		$this->assertActiveLogging();
 		$workObject = $this->getWorkObjectFromCacheData();
 
 		$lastWorkTimeBegin = $workObject->getLastWorkTimeBegin();
