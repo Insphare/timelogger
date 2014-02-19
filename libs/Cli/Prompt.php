@@ -74,6 +74,7 @@ class Cli_Prompt {
 		stream_set_blocking(STDIN, true);
 		$handle = fopen('php://stdin', 'r');
 		$line = fgets($handle);
-		return trim($line);
+		$line = trim($line);
+		return $line;
 	}
 }

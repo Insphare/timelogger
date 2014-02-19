@@ -278,7 +278,7 @@ class TimeLogger {
 	 */
 	private function parseArguments($string) {
 		$arguments = array();
-		$regEx = '~("|\'|)(?<argument>[a-z0-9äöü [:punct:]]+)(\1)( |$)~iU';
+		$regEx = '~("|\'|)(?<argument>[a-z0-9ßäöü [:punct:]]+)(\1)( |$)~iU';
 		preg_match_all($regEx, $string, $arrMatches, PREG_SET_ORDER);
 		foreach ($arrMatches as $arrMatch) {
 			$arguments[] = $arrMatch['argument'];
