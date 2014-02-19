@@ -57,6 +57,10 @@ class Command_Merge extends Command_Stop {
 		$message = sprintf('Merged from \'%s\' to \'%s\'. ', $workNameFrom, $workNameTo);
 		$workObjectTo->addNote($message);
 
+		foreach ($workObjectFrom->getNotes() as $note) {
+			$workObjectTo->addNote($note);
+		}
+
 		$confirmMessage = 'Would you really merge the work: \'' . $workNameFrom . '\' with following changes:' . PHP_EOL;
 		$this->getCliOutput()->createLine($confirmMessage, true, Cli_Output::COLOR_LIGHT_RED);
 		$this->getCliOutput()->createLine($message, true);
