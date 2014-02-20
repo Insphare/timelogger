@@ -44,14 +44,12 @@ class Cli_Prompt {
 	 * Prevent breaking out of the console.
 	 */
 	private function registerHandler() {
-		pcntl_signal(SIGINT, array(
+		$sigHandler = array(
 			$this,
 			'signalHandler'
-		));
-		pcntl_signal(SIGTSTP, array(
-			$this,
-			'signalHandler'
-		));
+		);
+		pcntl_signal(SIGINT, $sigHandler);
+		pcntl_signal(SIGTSTP, $sigHandler);
 	}
 
 	/**
