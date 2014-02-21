@@ -68,7 +68,7 @@ class FileManager {
 		$this->dirWorkings = $destination . self::DIR_NAME_WORKING . $ds;
 		$this->dirCache = $destination . self::DIR_NAME_CACHE . $ds;
 		$this->dirImage = $destination . self::DIR_NAME_IMAGES . $ds;
-		$this->lockedForCommands = $destination . 'cache' . $ds . 'lockedForCommands.dat';
+		$this->lockedForCommands = $destination . self::DIR_NAME_CACHE . $ds . 'lockedForCommands.dat';
 	}
 
 	/**
