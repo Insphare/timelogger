@@ -181,7 +181,7 @@ class Command_Show extends Command_Abstract {
 	 * @return array
 	 */
 	protected function getFiles() {
-		$destination = FileManager::get()->getDirTasks();
+		$destination = FileManager::get()->getDirWorkings();
 		$search = new FileDirectoryIterator($destination);
 		$search->addAllowedExtension('dat');
 		$search->setRecursive(true);

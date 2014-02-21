@@ -9,6 +9,26 @@
 class FileManager {
 
 	/**
+	 * Directory naming for workings.
+	 */
+	const DIR_NAME_WORKING = 'working';
+
+	/**
+	 * Directory naming for ascii images.
+	 */
+	const DIR_NAME_IMAGES = 'images';
+
+	/**
+	 * Directory naming for caches.
+	 */
+	const DIR_NAME_CACHE = 'cache';
+
+	/**
+	 * Directory naming for reports.
+	 */
+	const DIR_NAME_REPORT = 'report';
+
+	/**
 	 * @var null|string
 	 */
 	private $dirReports = null;
@@ -16,7 +36,7 @@ class FileManager {
 	/**
 	 * @var null|string
 	 */
-	private $dirTasks = null;
+	private $dirWorkings = null;
 
 	/**
 	 * @var null|string
@@ -44,10 +64,10 @@ class FileManager {
 	protected function __construct() {
 		$ds = DIRECTORY_SEPARATOR;
 		$destination = Config::get(Config::BASE_PATH);
-		$this->dirReports = $destination . 'report' . $ds;
-		$this->dirTasks = $destination . 'task' . $ds;
-		$this->dirCache = $destination . 'cache' . $ds;
-		$this->dirImage = $destination . 'images' . $ds;
+		$this->dirReports = $destination . self::DIR_NAME_REPORT . $ds;
+		$this->dirWorkings = $destination . self::DIR_NAME_WORKING . $ds;
+		$this->dirCache = $destination . self::DIR_NAME_CACHE . $ds;
+		$this->dirImage = $destination . self::DIR_NAME_IMAGES . $ds;
 		$this->lockedForCommands = $destination . 'cache' . $ds . 'lockedForCommands.dat';
 	}
 
@@ -280,15 +300,15 @@ class FileManager {
 		}
 
 		$label = preg_replace('~[^a-z0-9-]~i', '', $label);
-		$fileName = $this->dirTasks . $timeStamp . '_' . $label . '.dat';
+		$fileName = $this->dirWorkings . $timeStamp . '_' . $label . '.dat';
 		return $fileName;
 	}
 
 	/**
 	 * @return null|string
 	 */
-	public function getDirTasks() {
-		return $this->dirTasks;
+	public function getDirWorkings() {
+		return $this->dirWorkings;
 	}
 
 	/**

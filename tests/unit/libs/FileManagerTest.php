@@ -27,10 +27,10 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 	 */
 	public function testFixturePathsExists() {
 		$directories = array(
-			'cache',
-			'task',
-			'report',
-			'images'
+			FileManager::DIR_NAME_CACHE,
+			FileManager::DIR_NAME_WORKING,
+			FileManager::DIR_NAME_REPORT,
+			FileManager::DIR_NAME_IMAGES
 		);
 
 		foreach ($directories as $directoryName) {
@@ -47,10 +47,10 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 		$fileManager = $this->getFileManager();
 		$ds = DIRECTORY_SEPARATOR;
 
-		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . 'cache' . $ds, $fileManager->getDirCache());
-		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . 'task' . $ds, $fileManager->getDirTasks());
-		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . 'report' . $ds, $fileManager->getDirReports());
-		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . 'images' . $ds, $fileManager->getDirImage());
+		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_CACHE . $ds, $fileManager->getDirCache());
+		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_WORKING . $ds, $fileManager->getDirWorkings());
+		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_REPORT . $ds, $fileManager->getDirReports());
+		$this->assertSame(PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_IMAGES . $ds, $fileManager->getDirImage());
 		$this->assertTrue($fileManager->getInstance() instanceof FileManager);
 	}
 
@@ -61,7 +61,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 		$fileName = 'UnitTest';
 		$fileManager = $this->getFileManager();
 		$ds = DIRECTORY_SEPARATOR;
-		$cachePath = PHPUNIT_TEST_DIR_FIXTURES . 'cache' . $ds . 'UnitTest';
+		$cachePath = PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_CACHE . $ds . 'UnitTest';
 		$fileManager->storeCacheData($fileName, $saveValue);
 		$savedFileContent = file_get_contents($cachePath);
 		$this->assertSame($expectedString, $savedFileContent);
@@ -162,7 +162,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 
 		$workContainer = $fileManager->getWorkContainerByWorkNameFromToday($workName);
 		$this->assertSame($workName, $workContainer->getLabel());
-		$file = PHPUNIT_TEST_DIR_FIXTURES . 'task' . DIRECTORY_SEPARATOR . '1392591600_phpunittest.dat';
+		$file = PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_WORKING . DIRECTORY_SEPARATOR . '1392591600_phpunittest.dat';
 		$this->assertTrue(file_exists($file));
 		unlink($file);
 		$this->assertFalse(file_exists($file));
@@ -173,7 +173,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 	 *
 	 */
 	public function testSaveReport() {
-		$reportFile = PHPUNIT_TEST_DIR_FIXTURES . 'report' . DIRECTORY_SEPARATOR . 'report.txt';
+		$reportFile = PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_REPORT . DIRECTORY_SEPARATOR . 'report.txt';
 		$fileContent = 'testReport';
 		$fileManager = $this->getFileManager();
 		$fileManager->saveReport('report', $fileContent);
@@ -188,7 +188,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase {
 	 *
 	 */
 	public function testGetImage() {
-		$filePath = PHPUNIT_TEST_DIR_FIXTURES . 'images' . DIRECTORY_SEPARATOR . 'testimage.dat';
+		$filePath = PHPUNIT_TEST_DIR_FIXTURES . FileManager::DIR_NAME_IMAGES . DIRECTORY_SEPARATOR . 'testimage.dat';
 		$fileManager = $this->getFileManager();
 		$content = file_get_contents($fileManager->getFullImagePath('testimage.dat'));
 		$fileContent = file_get_contents($filePath);

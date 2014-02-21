@@ -17,7 +17,7 @@ include_once $basePath . 'libs' . DIRECTORY_SEPARATOR . 'Autoloader.php';
 
 $dirSetup = array(
 	'report',
-	'task',
+	'working',
 	'cache'
 );
 foreach ($dirSetup as $dir) {

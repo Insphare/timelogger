@@ -1,5 +1,5 @@
 #!/bin/bash
 
 git pull
-cp task/* taskBackup/
+cp working/* archive/
 sh logger.sh

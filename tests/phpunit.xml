@@ -26,8 +26,8 @@
 		<whitelist>
 			<directory suffix=".php">../libs</directory>
 			<exclude>
-				<directory suffix=".php">../task</directory>
-				<directory suffix=".php">../taskBackup</directory>
+				<directory suffix=".php">../working</directory>
+				<directory suffix=".php">../archive</directory>
 				<directory suffix=".php">../report</directory>
 				<directory suffix=".php">../images</directory>
 			</exclude>
