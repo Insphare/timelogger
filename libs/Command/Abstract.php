@@ -11,7 +11,7 @@ abstract class Command_Abstract {
 	/**
 	 *
 	 */
-	const TASK_LENGTH_NAME = 25;
+	const WORK_LENGTH_NAME = 25;
 
 	/**
 	 * @var array
@@ -205,10 +205,10 @@ abstract class Command_Abstract {
 	 * @return null|Work_Container|Work_LoadByData
 	 */
 	protected function getWorkContainerByName($workName) {
-		$this->checkLength('Task name', $workName, Command_Abstract::TASK_LENGTH_NAME);
+		$this->checkLength('Work name', $workName, Command_Abstract::WORK_LENGTH_NAME);
 
 		if (empty($workName)) {
-			$this->throwError('Please enter a task name.');
+			$this->throwError('Please enter work name.');
 		}
 
 		$workContainer = $this->getFileManager()->getWorkContainerByWorkNameFromToday($workName);

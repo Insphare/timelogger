@@ -196,7 +196,7 @@ class TimeLogger {
 		$text = array(
 			'start		- Start work',
 			'stop		- Stop current work',
-			'correct	- Correct current work name',
+			'correct 	- Correct current work name',
 			'info		- Information about the current work',
 			'pause		- Pause the current work',
 			'continue	- Continue the current work',
@@ -204,6 +204,7 @@ class TimeLogger {
 			'merge		- Merge two works to one',
 			'resume		- Resume previous work',
 			'show		- Show tasks',
+			'clear		- Clearing the screen',
 			'export		- Export all to text files (with notes)',
 			'append		- Append time to work',
 			'help		- Show help.',

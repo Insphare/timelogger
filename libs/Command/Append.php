@@ -81,8 +81,6 @@ class Command_Append extends Command_Abstract {
 		$workObject->appendManualWorkTime($fromSec, $duration);
 		$newDurationString = $this->getDurationLine($workObject);
 
-		$this->getFileManager()->storeWork($workObject);
-
 		$confirmMessage = 'Would you really append this time to work: \'' . $workName . '\' with following changes:' . PHP_EOL;
 		$this->getCliOutput()->createLine($confirmMessage, true, Cli_Output::COLOR_LIGHT_RED);
 		$this->getCliOutput()->createLine('Append time to work: ' . $workName, true);

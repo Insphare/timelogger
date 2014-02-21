@@ -108,19 +108,19 @@ class Command_Show extends Command_Abstract {
 	}
 
 	/**
-	 * @param $task
+	 * @param $workName
 	 * @return string
 	 */
-	protected function fixTasksLength($task) {
-		$length = Command_Abstract::TASK_LENGTH_NAME;
+	protected function fixWorkLength($workName) {
+		$length = Command_Abstract::WORK_LENGTH_NAME;
 
 		// fix console length on these special character
-		$specialWordsCount = preg_match_all('~(ö|ä|ü)~i', $task, $matches);
+		$specialWordsCount = preg_match_all('~(ö|ä|ü)~i', $workName, $matches);
 		if ($specialWordsCount > 0) {
 			$length += $specialWordsCount;
 		}
 
-		return str_pad($task, $length, ' ');
+		return str_pad($workName, $length, ' ');
 	}
 
 	/**
@@ -215,7 +215,7 @@ class Command_Show extends Command_Abstract {
 		$hourUnit = $this->getCalculator()->getHourUnit($duration);
 
 		$line = array();
-		$line[] = $this->fixTasksLength($workObject->getLabel()) . $this->generateTabulatorByAmount(1);
+		$line[] = $this->fixWorkLength($workObject->getLabel()) . $this->generateTabulatorByAmount(1);
 		$line[] = date('H:i:s', $start) . $this->generateTabulatorByAmount(1);
 		$line[] = date('H:i:s', $stop) . $this->generateTabulatorByAmount(1);
 
@@ -280,7 +280,7 @@ class Command_Show extends Command_Abstract {
 		$this->appendToOutput('');
 
 		$this->appendToOutput($this->getSeparatorLineOne());
-		$this->appendToTemp($this->fixTasksLength('Task'), 1);
+		$this->appendToTemp($this->fixWorkLength('Work'), 1);
 		$this->appendToTemp('Start', 2);
 		$this->appendToTemp('Stop', 2);
 		$this->appendToTemp($this->padWithSpaceToLeft('Duration', self::DURATION_SPACE_LENGTH), 1);
@@ -352,13 +352,13 @@ class Command_Show extends Command_Abstract {
 		$tmpLines = array();
 		$summaryTime = 0;
 
-		foreach ($group as $task => $data) {
+		foreach ($group as $workName => $data) {
 			$workSeconds = $data['work'];
 			$breakSeconds = $data['break'];
 			$rounded = $this->getCalculator()->getHourUnit($workSeconds);
 			$summaryTime += $this->fixStringToFloat($rounded);
 
-			$this->appendToTemp($this->fixTasksLength($task), 1);
+			$this->appendToTemp($this->fixWorkLength($workName), 1);
 			$this->appendToTemp($this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList($workSeconds), self::DURATION_SPACE_LENGTH), 1);
 			$this->appendToTemp($this->padWithSpaceToLeft($this->getCalculator()->getHumanAbleList($breakSeconds), self::DURATION_SPACE_LENGTH), 2);
 			$this->appendToTemp($rounded);
@@ -371,7 +371,7 @@ class Command_Show extends Command_Abstract {
 		$this->appendToOutput('');
 		$this->appendToOutput('');
 		$this->appendToOutput($this->getSeparatorLineOne());
-		$this->appendToTemp($this->fixTasksLength('Summary'), 6);
+		$this->appendToTemp($this->fixWorkLength('Summary'), 6);
 		$this->appendToTemp('');
 
 		$this->appendToTemp($this->fixFloatToString($summaryTime), 2);
@@ -386,7 +386,7 @@ class Command_Show extends Command_Abstract {
 		$this->appendToOutput('');
 		$this->appendToOutput($this->getSeparatorLineTwo());
 
-		$this->appendToTemp($this->fixTasksLength('Task'), 1);
+		$this->appendToTemp($this->fixWorkLength('Work'), 1);
 		$this->appendToTemp($this->padWithSpaceToLeft('Duration', self::DURATION_SPACE_LENGTH), 1);
 		$this->appendToTemp($this->padWithSpaceToLeft('Break', self::DURATION_SPACE_LENGTH), 2);
 		$this->appendToTemp('Log hours');

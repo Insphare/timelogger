@@ -15,7 +15,7 @@ class Command_Info extends Command_Stop {
 		$this->assertActiveLogging();
 
 		$workObject = $this->getWorkObjectFromCacheData();
-		$taskLabel = $workObject->getLabel();
+		$workName = $workObject->getLabel();
 
 		if ($workObject->hasActiveWorkTime()) {
 			$workObject->stopWorkTime();
@@ -25,7 +25,7 @@ class Command_Info extends Command_Stop {
 			$workObject->stopBreakTime();
 		}
 
-		$string = 'You are working on \'' . $taskLabel . '\'. ' . $this->getDurationLine($workObject);
+		$string = 'You are working on \'' . $workName . '\'. ' . $this->getDurationLine($workObject);
 		return $string;
 	}
 }
