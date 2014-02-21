@@ -22,7 +22,6 @@ class Cli_Prompt {
 	public function __construct() {
 		// Prevent breaking out of the console.
 		$this->registerHandler();
-
 		self::setBreakSignal(false);
 	}
 
