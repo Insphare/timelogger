@@ -55,7 +55,7 @@ class Command_Merge extends Command_Stop {
 		}
 
 		$message = sprintf('Merged from \'%s\' to \'%s\'. ', $workNameFrom, $workNameTo);
-		$workObjectTo->addNote($message);
+		$workObjectTo->addNote($message . ''.$this->getDurationLine($workObjectFrom).'');
 
 		foreach ($workObjectFrom->getNotes() as $note) {
 			$workObjectTo->addNote($note);
