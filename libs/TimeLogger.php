@@ -373,7 +373,7 @@ class TimeLogger {
 		if (false !== strrpos($string, PHP_EOL)) {
 			return;
 		}
-		$command = 'notify-send "'.escapeshellarg($string).'"';
+		$command = 'notify-send "'.($string).'"';
 		`$command`;
 	}
 
