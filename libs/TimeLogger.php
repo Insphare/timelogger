@@ -370,6 +370,9 @@ class TimeLogger {
 	 * @since 2014-04
 	 */
 	private function guiNotify($string) {
+		if (false !== strrpos($string, PHP_EOL)) {
+			return;
+		}
 		$command = 'notify-send "'.escapeshellarg($string).'"';
 		`$command`;
 	}
