@@ -359,6 +359,21 @@ class TimeLogger {
 		return $string;
 	}
 
+
+
+	/**
+	 * Testing method.
+	 *
+	 * @param $string
+	 *
+	 * @author Manuel Will
+	 * @since 2014-04
+	 */
+	private function guiNotify($string) {
+		$command = 'notify-send "'.escapeshellarg($string).'"';
+		`$command`;
+	}
+
 	/**
 	 * @author Manuel Will
 	 * @since 2013
@@ -369,6 +384,7 @@ class TimeLogger {
 			/** @var Command_Abstract $classObject */
 			$classObject = new $class($arguments);
 			$resultString = $classObject->execute();
+			$this->guiNotify($resultString);
 			$this->printLine($resultString, true, Cli_Output::COLOR_GREEN);
 			$this->printLine('');
 			$this->stupidCounter = 0;
