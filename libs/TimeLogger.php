@@ -370,6 +370,8 @@ class TimeLogger {
 	 * @since 2014-04
 	 */
 	private function guiNotify($string) {
+		// not supported now. should check if notify-send is available on system.
+		return;
 		if (false !== strrpos($string, PHP_EOL)) {
 			return;
 		}
