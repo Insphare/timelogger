@@ -32,9 +32,8 @@ class Calculate {
 		}
 
 		$hourUnit = number_format(round(($intSeconds / 60) / 60, 3), 2, ',', '.');
-
-		$check = (int)$hourUnit{2} . (int)$hourUnit{3};
-
+		preg_match('~-?(?<before>\d+),(?<comma>\d+)~i', $hourUnit, $match);
+		$check = $match['comma'];
 		$round = false;
 		$plusH = false;
 		$plusM = 0;
@@ -72,7 +71,7 @@ class Calculate {
 				break;
 		}
 
-		$hour = (int)$hourUnit{0};
+		$hour = (int)$match['before'];
 		if (true === $round) {
 			if (true === $plusH) {
 				$hour++;
@@ -85,7 +84,7 @@ class Calculate {
 			$hourUnit = $hour . ',' . $plusM;
 		}
 
-		return $hourUnit;
+		return (($intSeconds<0) ? '-' : '') . $hourUnit;
 	}
 
 	/**
@@ -100,42 +99,27 @@ class Calculate {
 	}
 
 	/**
-	 * @param $time
+	 * @param $diffSeconds
 	 * @return string
 	 */
-	public function getHumanAbleList($time) {
-		$diffSeconds = $time;
-		// is not needed
-		//		$years = floor($diffSeconds / 31556926);
-		//
-		//		$month = floor($diffSeconds / 262974383);
-		//		$month = $this->padString($month, 2, 0);
-		//
-		//		$diffSeconds = $diffSeconds % 31556926;
-		//		$days = floor($diffSeconds / 86400);
-		//		$days = $this->padString($days, 3, 0);
+	public function getHumanAbleList($diffSeconds) {
+		$dateTime = new DateTime();
+		$dateTimeDiff = $dateTime->diff(new DateTime('@'.(time()+$diffSeconds)));
 
-		$diffSeconds = $diffSeconds % 86400;
-		$hours = floor($diffSeconds / 3600);
-		$hours = $this->padString($hours, 1);
-		$diffSeconds = $diffSeconds % 3600;
-
-		$minutes = floor($diffSeconds / 60);
-		$minutes = $this->padString($minutes, self::PAD_LENGTH_GAP);
-
-		$diffSeconds = $diffSeconds % 60;
-		$diffSeconds = $this->padString($diffSeconds, self::PAD_LENGTH_GAP);
+		$hours = $this->padString($dateTimeDiff->h, 1);
+		$minutes = $this->padString($dateTimeDiff->i, self::PAD_LENGTH_GAP);
+		$seconds = $this->padString($dateTimeDiff->s, self::PAD_LENGTH_GAP);
 
 		if ($hours > 0) {
-			$return = sprintf('%sh%sm%ss', $hours, $minutes, $diffSeconds);
+			$return = sprintf('%sh%sm%ss', $hours, $minutes, $seconds);
 		}
 		elseif ((int)$hours <= 0 && (int)$minutes <= 0) {
-			$return = sprintf('%ss', $diffSeconds);
+			$return = sprintf('%ss', $seconds);
 		}
 		else {
-			$return = sprintf('%sm%ss', $minutes, $diffSeconds);
+			$return = sprintf('%sm%ss', $minutes, $seconds);
 		}
 
-		return $this->padString($return, self::PAD_LENGTH);
+		return $this->padString(($diffSeconds<0?'-':'').$return, self::PAD_LENGTH);
 	}
 }

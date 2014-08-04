@@ -77,7 +77,7 @@ class Command_Append extends Command_Abstract {
 		$oldDurationString = $this->getDurationLine($workObject);
 
 		$fromSec = time() - $this->getHourInSeconds($startTime);
-		$duration = $this->getHourInSeconds($duration, false);
+		$duration = $this->getHourInSeconds($duration, true); // allow negative seconds to correct time
 		$workObject->appendManualWorkTime($fromSec, $duration);
 		$newDurationString = $this->getDurationLine($workObject);
 

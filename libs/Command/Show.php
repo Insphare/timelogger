@@ -229,8 +229,8 @@ class Command_Show extends Command_Abstract {
 		}
 
 		$line[] = $this->padWithSpaceToLeft($hourUnit, self::DURATION_SPACE_LENGTH - 1);
-		$line = implode('', $line);
 
+		$line = implode('', $line);
 		return $line;
 	}
 
