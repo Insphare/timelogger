@@ -204,6 +204,7 @@ class TimeLogger {
 			'merge		- Merge two works to one',
 			'resume		- Resume previous work',
 			'show		- Show tasks',
+			'compact	- Compact view',
 			'clear		- Clearing the screen',
 			'export		- Export all to text files (with notes)',
 			'append		- Append time to work',
