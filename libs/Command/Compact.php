@@ -36,6 +36,9 @@ class Command_Compact extends Command_Show {
 //			$tmp[] = '┼';
 			$tmp[] = '|';
 			$notes = implode(', ', $wo->getNotes());
+			if (empty($notes)) {
+				$notes = '-';
+			}
 			$tmp[] = str_pad(' ' . $notes, $spaceNotes, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '│';
 
