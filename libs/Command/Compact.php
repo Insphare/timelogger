@@ -28,7 +28,7 @@ class Command_Compact extends Command_Show {
 		foreach ($workObjects as $wo) {
 			$tmp = array();
 //			$tmp[] = '│';
-			$tmp[] = '|';
+			$tmp[] = '| ';
 			$tmp[] = str_pad($wo->getLabel(), $spaceLabel, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '┼';
 			$tmp[] = '|';
