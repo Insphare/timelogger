@@ -15,7 +15,7 @@ class Command_Compact extends Command_Show {
 			return 'There are no logs, yet.';
 		}
 
-		$spaceLabel = 10;
+		$spaceLabel = Command_Abstract::WORK_LENGTH_NAME;
 		$spaceWork = 7;
 		$spaceNotes = 30;
 
