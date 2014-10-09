@@ -39,7 +39,7 @@ class Command_Compact extends Command_Show {
 			if (empty($notes)) {
 				$notes = '-';
 			}
-			$tmp[] = str_pad(' ' . $notes, $spaceNotes, ' ', STR_PAD_RIGHT);
+			$tmp[] = $notes;
 //			$tmp[] = '│';
 			$tmp[] = ' |';
 
