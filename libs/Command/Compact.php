@@ -34,7 +34,7 @@ class Command_Compact extends Command_Show {
 			$tmp[] = '|';
 			$tmp[] = str_pad(' ' . $this->getCalculator()->getHourUnit($wo->getWorkTime()).' h ', $spaceWork, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '┼';
-			$tmp[] = '|';
+			$tmp[] = '| ';
 			$notes = implode(', ', $wo->getNotes());
 			if (empty($notes)) {
 				$notes = '-';
