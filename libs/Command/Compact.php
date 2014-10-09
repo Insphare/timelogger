@@ -41,7 +41,7 @@ class Command_Compact extends Command_Show {
 			}
 			$tmp[] = str_pad(' ' . $notes, $spaceNotes, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '│';
-			$tmp[] = '|';
+			$tmp[] = ' |';
 
 			$output[] = implode('', $tmp);
 		}
