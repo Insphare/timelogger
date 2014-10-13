@@ -472,7 +472,8 @@ class Command_Show extends Command_Abstract {
 		foreach ($workObjects as $wo) {
 			$label = $wo->getLabel();
 
-			switch (strtolower($label)) {
+			echo $label;exit;
+			switch (strtolower(trim($label))) {
 				case 'su':
 					$label = 'Standup';
 					break;
