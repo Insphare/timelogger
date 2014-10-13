@@ -470,10 +470,30 @@ class Command_Show extends Command_Abstract {
 //		$output[] = str_pad('', $spaceLabel, '-', STR_PAD_RIGHT) . '-' . str_pad('', $spaceWork, '-') . '-' . str_pad('', $spaceNotes, '-') . '-';
 		/** @var $wo Work_Container */
 		foreach ($workObjects as $wo) {
+			$label = $wo->getLabel();
+
+			switch (strtolower($label)) {
+				case 'su':
+					$label = 'Standup';
+					break;
+
+				case 'rfm':
+					$label = 'Refacotring-Meeting';
+					break;
+
+				case 'sm':
+					$label = 'Sprint-Meeting';
+					break;
+
+				case 'ae':
+					$label = 'Erfassung Arbeitszeiten (-Inhalte)';
+					break;
+			}
+
 			$tmp = array();
 //			$tmp[] = '│';
 			$tmp[] = '| ';
-			$tmp[] = str_pad($wo->getLabel(), $spaceLabel, ' ', STR_PAD_RIGHT);
+			$tmp[] = str_pad($label, $spaceLabel, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '┼';
 			$tmp[] = '|';
 			$tmp[] = str_pad(' ' . $this->getCalculator()->getHourUnit($wo->getWorkTime()).' h ', $spaceWork, ' ', STR_PAD_RIGHT);
