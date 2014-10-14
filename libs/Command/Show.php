@@ -504,7 +504,12 @@ class Command_Show extends Command_Abstract {
 				$v = trim(preg_replace('~merged\s+from\s+\'([^\']+)\'[^\)]+\)~i', '$1', $v));
 				$v = trim(preg_replace('~^'.$label.'(.+)~i', '$1', $v));
 			}
-			$notes = implode(', ', $notes);
+			// remove duplicates
+			$mapping = array();
+			foreach ($notes as $k => $v) {
+				$mapping[md5(strtolower(trim($v)))] = $v;
+			}
+			$notes = implode(', ', $mapping);
 			if (empty($notes)) {
 				$notes = '-';
 			}
