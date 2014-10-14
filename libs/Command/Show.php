@@ -499,7 +499,12 @@ class Command_Show extends Command_Abstract {
 			$tmp[] = str_pad(' ' . $this->getCalculator()->getHourUnit($wo->getWorkTime()).' h ', $spaceWork, ' ', STR_PAD_RIGHT);
 //			$tmp[] = '┼';
 			$tmp[] = '| ';
-			$notes = implode(', ', $wo->getNotes());
+			$notes = $wo->getNotes();
+			foreach ($notes as &$v) {
+				$v = trim(preg_replace('~merged\s+from\s+\'([^\']+)\'[^\)]+\)~i', '$1', $v));
+				$v = trim(preg_replace('~^'.$label.'(.+)~i', '$1', $v));
+			}
+			$notes = implode(', ', $notes);
 			if (empty($notes)) {
 				$notes = '-';
 			}
