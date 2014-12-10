@@ -506,8 +506,8 @@ class Command_Show extends Command_Abstract {
 			}
 			// remove duplicates
 			$mapping = array();
-			foreach ($notes as $k => $v) {
-				$mapping[md5(strtolower(trim($v)))] = $v;
+			foreach ($notes as $k => $va) {
+				$mapping[md5(strtolower(trim($va)))] = $va;
 			}
 			$notes = implode(', ', $mapping);
 			if (empty($notes)) {
