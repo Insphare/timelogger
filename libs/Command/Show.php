@@ -488,6 +488,14 @@ class Command_Show extends Command_Abstract {
 				case 'ae':
 					$label = 'Erfassung Arbeitszeiten (-Inhalte)';
 					break;
+
+				case 'ik':
+					$label = 'Interne Kommunikation';
+					break;
+
+				case 'ao':
+					$label = 'Allgemeines (und Organisatorisches)';
+					break;
 			}
 
 			$tmp = array();
