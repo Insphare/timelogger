@@ -472,31 +472,31 @@ class Command_Show extends Command_Abstract {
 		foreach ($workObjects as $wo) {
 			$label = $wo->getLabel();
 
-			switch (strtolower(trim($label))) {
-				case 'su':
-					$label = 'Standup';
-					break;
-
-				case 'rfm':
-					$label = 'Refacotring-Meeting';
-					break;
-
-				case 'sm':
-					$label = 'Sprint-Meeting';
-					break;
-
-				case 'ae':
-					$label = 'Erfassung Arbeitszeiten (-Inhalte)';
-					break;
-
-				case 'ik':
-					$label = 'Interne Kommunikation';
-					break;
-
-				case 'ao':
-					$label = 'Allgemeines (und Organisatorisches)';
-					break;
-			}
+//			switch (strtolower(trim($label))) {
+//				case 'su':
+//					$label = 'Standup';
+//					break;
+//
+//				case 'rfm':
+//					$label = 'Refacotring-Meeting';
+//					break;
+//
+//				case 'sm':
+//					$label = 'Sprint-Meeting';
+//					break;
+//
+//				case 'ae':
+//					$label = 'Erfassung Arbeitszeiten (-Inhalte)';
+//					break;
+//
+//				case 'ik':
+//					$label = 'Interne Kommunikation';
+//					break;
+//
+//				case 'ao':
+//					$label = 'Allgemeines (und Organisatorisches)';
+//					break;
+//			}
 
 			$tmp = array();
 //			$tmp[] = '│';
