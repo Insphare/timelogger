@@ -13,11 +13,14 @@ class Command_Append extends Command_Abstract {
 	 * @return string
 	 */
 	public function execute() {
-		$this->assertArguments('Usage: append <workname> (-)<start>h|now <to>h, E.g. append refactoring -1h 1,25h');
+		$this->assertArguments('Usage: append <workname> (-)<duration>h|now <start>h, E.g. append refactoring -1h 1,25h');
 
 		$work = $this->getArgument(1);
-		$startTime = $this->getArgument(2);
-		$duration = $this->getArgument(3);
+		$duration = $this->getArgument(2);
+		$startTime = $this->getArgument(3);
+		if (empty($startTime)) {
+			$startTime = 'now';
+		}
 
 		if (empty($startTime)) {
 			throw new Command_Exception('Argument "from" is required.');
